@@ -19,6 +19,7 @@ export default function IntroAnimation() {
   const [pendingSpeech, setPendingSpeech] = useState<string | null>(null)
   const [hasUserInteracted, setHasUserInteracted] = useState(false)
   const [playbackRate, setPlaybackRate] = useState(1)
+  const [showBackground, setShowBackground] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
   const speechRef = useRef<SpeechSynthesisUtterance | null>(null)
   const { currentColor } = useThemeColor()
@@ -258,6 +259,7 @@ export default function IntroAnimation() {
       setCurrentTextIndex(0)
       setDisplayText("")
       setCurrentTime(0)
+      setShowBackground(true)
       if (videoRef.current) {
         videoRef.current.currentTime = 0
       }
@@ -267,12 +269,15 @@ export default function IntroAnimation() {
     }
     setIsPlaying((prev) => {
       const newPlaying = !prev
-      // If playing and there is a pending speech, trigger it
-      if (newPlaying && pendingSpeech && voicesLoaded && speechRef.current && window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-        speechRef.current.text = pendingSpeech
-        window.speechSynthesis.speak(speechRef.current)
-        setPendingSpeech(null)
+      if (newPlaying) {
+        setShowBackground(false)
+        // If playing and there is a pending speech, trigger it
+        if (pendingSpeech && voicesLoaded && speechRef.current && window.speechSynthesis) {
+          window.speechSynthesis.cancel()
+          speechRef.current.text = pendingSpeech
+          window.speechSynthesis.speak(speechRef.current)
+          setPendingSpeech(null)
+        }
       }
       return newPlaying
     })
@@ -426,10 +431,34 @@ export default function IntroAnimation() {
 
         <AnimatedSection delay={200}>
           <div className="relative max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl aspect-video">
+            {/* Background image */}
+            <div 
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                showBackground ? 'opacity-100' : 'opacity-0'
+              }`}
+              style={{
+                backgroundImage: 'url("/background.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                <button
+                  onClick={togglePlay}
+                  className="bg-white/20 hover:bg-white/30 text-white rounded-full p-4 transition-colors transform hover:scale-110"
+                  aria-label="Play video"
+                >
+                  <Play size={40} />
+                </button>
+              </div>
+            </div>
+
             {/* Real video */}
             <video
               ref={videoRef}
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-cover transition-opacity duration-1000 ${
+                showBackground ? 'opacity-0' : 'opacity-100'
+              }`}
               muted={isMuted}
               loop
               playsInline
