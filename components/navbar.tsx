@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import ThemeToggle from "@/components/theme-toggle"
 import ThemeColorPicker from "@/components/theme-color-picker"
+import AuthButtons from "@/components/auth/auth-buttons"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -70,8 +71,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-3">
-            <ThemeColorPicker />
             <ThemeToggle />
+            <ThemeColorPicker />
+            <AuthButtons />
           </div>
 
           {/* Mobile Navigation Toggle */}
@@ -88,7 +90,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                  className="text-gray-400 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}

@@ -13,7 +13,7 @@ export default function Testimonials() {
       id: 1,
       name: "Sarah Johnson",
       position: "CEO, TechStart Inc.",
-      image: "/placeholder.svg?height=200&width=200",
+      image: "/sarah.png",
       content:
         "Working with this team was an absolute pleasure. They took our outdated website and transformed it into a modern, user-friendly platform that perfectly represents our brand. The attention to detail and commitment to quality exceeded our expectations.",
       rating: 5,
@@ -22,7 +22,7 @@ export default function Testimonials() {
       id: 2,
       name: "Michael Chen",
       position: "Marketing Director, GrowthBox",
-      image: "/placeholder.svg?height=200&width=200",
+      image: "/developer.png",
       content:
         "Our e-commerce sales increased by 45% within three months of launching our new website. The intuitive design and seamless checkout process have significantly improved our conversion rates. I highly recommend their services to any business looking to grow online.",
       rating: 5,
@@ -31,7 +31,7 @@ export default function Testimonials() {
       id: 3,
       name: "Emma Rodriguez",
       position: "Founder, Artisan Crafts",
-      image: "/placeholder.svg?height=200&width=200",
+      image: "/emma.png",
       content:
         "As a small business owner, I needed a website that would showcase my products without breaking the bank. They delivered a beautiful, functional site that fits my budget and has helped me reach new customers. The ongoing support has been invaluable.",
       rating: 4,
@@ -40,7 +40,7 @@ export default function Testimonials() {
       id: 4,
       name: "David Thompson",
       position: "CTO, InnovateTech",
-      image: "/placeholder.svg?height=200&width=200",
+      image: "/david.png",
       content:
         "The technical expertise demonstrated throughout our project was impressive. They implemented complex features with ease and ensured our website was fast, secure, and scalable. Their ability to translate technical requirements into practical solutions made all the difference.",
       rating: 5,

@@ -26,7 +26,7 @@ export default function ThemeToggle() {
       className="rounded-full"
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? <Sun className="h-5 w-5 text-yellow-300" /> : <Moon className="h-5 w-5 text-gray-700" />}
+      {theme === "dark" ? <Sun className="h-5 w-5 text-yellow-300" /> : <Moon className="h-5 w-5 text-gray-400" />}
     </Button>
   )
 }

@@ -8,6 +8,7 @@ export default function ThemeColorPicker() {
   const { currentColor, setThemeColor, availableColors } = useThemeColor()
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -23,11 +24,23 @@ export default function ThemeColorPicker() {
     }
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-medium py-2 px-3 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40"
+        className={`flex items-center gap-2 font-medium py-2 px-3 rounded-full transition-all duration-300 border
+          ${isScrolled
+            ? "bg-white/80 border-white/80 text-gray-400 dark:bg-gray-900/80 dark:text-white"
+            : "bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/50 hover:border-white/40"
+          }`}
         aria-label="Change theme color"
       >
         <Palette className="h-4 w-4" />
