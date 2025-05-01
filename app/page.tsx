@@ -1,6 +1,5 @@
 import Hero from "@/components/hero"
 import Navbar from "@/components/navbar"
-import Services from "@/components/services"
 import Projects from "@/components/projects"
 import Pricing from "@/components/pricing"
 import Testimonials from "@/components/testimonials"
@@ -18,9 +17,6 @@ export default function Home() {
       <Hero />
       <IntroAnimation />
       <TargetAudience />
-      <Projects />
-      <Services />
-      <Pricing />
       <Testimonials />
       <Blog />
       <Footer />
