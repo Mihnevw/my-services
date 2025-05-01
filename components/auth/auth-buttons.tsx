@@ -4,12 +4,14 @@ import { useState } from "react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useAuth } from "@/contexts/auth-context"
 import AuthModal from "./auth-modal"
-import { LogOut, User } from "lucide-react"
+import { LogOut, User, ChevronDown } from "lucide-react"
+import Link from "next/link"
 
 export default function AuthButtons() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalView, setModalView] = useState<"login" | "register" | "forgot-password">("login")
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false)
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
   const { currentColor } = useThemeColor()
   const { user, signOut } = useAuth()
 
@@ -36,21 +38,45 @@ export default function AuthButtons() {
     return (
       <>
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-              <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
-            </div>
-            <span className="text-gray-400 dark:text-gray-300 font-medium">
-              {user.email?.split('@')[0]}
-            </span>
+          <div className="relative">
+            <button
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            >
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+              </div>
+              <span className="text-gray-400 dark:text-gray-300 font-medium">
+                {user.email?.split('@')[0]}
+              </span>
+              <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-300" />
+            </button>
+
+            {showProfileMenu && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                <div className="py-1" role="menu" aria-orientation="vertical">
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    role="menuitem"
+                    onClick={() => setShowProfileMenu(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setShowSignOutConfirm(true)
+                      setShowProfileMenu(false)
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    role="menuitem"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-          <button
-            onClick={() => setShowSignOutConfirm(true)}
-            className="flex items-center space-x-1 text-gray-400 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Sign out</span>
-          </button>
         </div>
 
         {/* Sign Out Confirmation Modal */}
