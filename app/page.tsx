@@ -1,13 +1,13 @@
-import Hero from "@/components/hero"
-import Navbar from "@/components/navbar"
-import Projects from "@/components/projects"
-import Pricing from "@/components/pricing"
-import Testimonials from "@/components/testimonials"
-import Blog from "@/components/blog"
-import Footer from "@/components/footer"
-import ScrollProgress from "@/components/scroll-progress"
-import TargetAudience from "@/components/target-audience"
-import IntroAnimation from "@/components/intro-animation"
+import Hero from "@/components/hero";
+import Navbar from "@/components/navbar";
+import Pricing from "@/components/pricing";
+import Testimonials from "@/components/testimonials";
+import BlogPreview from "@/components/blog-preview";
+import Footer from "@/components/footer";
+import ScrollProgress from "@/components/scroll-progress";
+import TargetAudience from "@/components/target-audience";
+import IntroAnimation from "@/components/intro-animation";
+import ServicesPreview from "@/components/services-preview";
 
 export default function Home() {
   return (
@@ -17,8 +17,10 @@ export default function Home() {
       <Hero />
       <IntroAnimation />
       <TargetAudience />
+      <ServicesPreview />
       <Testimonials />
-      <Blog />
+      <BlogPreview />
+      <Pricing />
       <Footer />
     </main>
   )
