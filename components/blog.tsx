@@ -8,36 +8,36 @@ export default function Blog() {
   const blogPosts = [
     {
       id: 1,
-      title: "10 Web Design Trends to Watch in 2023",
+      title: "10 Web Design Trends to Watch in 2025",
       excerpt:
         "Discover the latest web design trends that are shaping the digital landscape this year, from glassmorphism to advanced animations.",
-      image: "/placeholder.svg?height=600&width=800",
-      date: "June 15, 2023",
+      image: "/web-design-trends-2025.webp",
+      date: "Apr 23, 2025",
       readTime: "5 min read",
       category: "Design",
-      slug: "#",
+      slug: "https://www.theedigital.com/blog/web-design-trends",
     },
     {
       id: 2,
       title: "How to Optimize Your Website for Better Conversion Rates",
       excerpt:
         "Learn proven strategies to improve your website's conversion rates through strategic design changes, A/B testing, and user experience improvements.",
-      image: "/placeholder.svg?height=600&width=800",
-      date: "May 22, 2023",
+      image: "/digital-blog.webp",
+      date: "January 15, 2025",
       readTime: "8 min read",
       category: "Marketing",
-      slug: "#",
+      slug: "https://www.digitalsilk.com/digital-trends/how-to-increase-website-conversion-rates/",
     },
     {
       id: 3,
       title: "The Complete Guide to SEO for Developers",
       excerpt:
         "A comprehensive guide to search engine optimization specifically tailored for developers, covering technical SEO aspects and implementation.",
-      image: "/placeholder.svg?height=600&width=800",
-      date: "April 10, 2023",
-      readTime: "12 min read",
+      image: "/seo.jpg",
+      date: "March 2, 2025",
+      readTime: "5 min read",
       category: "Development",
-      slug: "#",
+      slug: "https://www.habilelabs.io/blog/complete-seo-guide-for-web-developers",
     },
   ]
 
