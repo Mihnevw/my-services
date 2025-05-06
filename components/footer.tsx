@@ -33,7 +33,7 @@ export default function Footer() {
               <Facebook className="h-5 w-5 group-hover:scale-110 transition-transform" />
             </a>
             <a
-              href="/"
+              href="https://www.linkedin.com/in/stilian-mihnev/"
               className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 transition-colors duration-300 group"
               aria-label="LinkedIn"
             >
@@ -105,7 +105,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© {currentYear} Portfolio. All rights reserved.</p>
+          <p className="text-gray-400">© {currentYear} Mihnev. All rights reserved.</p>
           <div className="mt-4 md:mt-0 flex space-x-6">
             <Link href="/legal/privacy-policy" className="text-gray-400 hover:text-white transition-colors">
               Privacy Policy

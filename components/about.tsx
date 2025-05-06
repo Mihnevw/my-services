@@ -48,7 +48,7 @@ export default function About() {
               <div className="relative bg-white dark:bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
                 <div className="max-w-3xl">
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                    Hello! I'm a passionate web developer with over 5 years of experience creating beautiful, functional
+                    Hello! I'm a passionate web developer with over 2 years of experience creating beautiful, functional
                     websites and applications. I specialize in modern web technologies and focus on delivering clean,
                     user-friendly designs that help businesses achieve their goals.
                   </p>
@@ -58,7 +58,7 @@ export default function About() {
                     trends to provide the best solutions for my clients.
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
-                    {["React", "Next.js", "TypeScript", "Tailwind CSS", "Node.js", "UI/UX Design"].map(
+                    {["JavaScript", "React", "Next.js", "TypeScript", "Tailwind CSS", "Node.js", "UI/UX Design", "Supabase", "Git"].map(
                       (skill, index) => (
                         <span
                           key={index}

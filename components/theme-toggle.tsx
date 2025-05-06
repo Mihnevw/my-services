@@ -15,7 +15,7 @@ export default function ThemeToggle() {
   }, [])
 
   if (!mounted) {
-    return <div className="w-9 h-9"></div> // Placeholder to avoid layout shift
+    return <div className="w-9 h-9"></div> // Заместител, за да се избегне изместване на оформлението
   }
 
   return (

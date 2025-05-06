@@ -90,7 +90,7 @@ export default function TargetAudience() {
 
                   <div className="mt-8">
                     <a
-                      href="#contact"
+                      href="/contact"
                       className="inline-flex items-center text-blue-600 dark:text-blue-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                     >
                       Learn more about {audience.title.toLowerCase()} solutions

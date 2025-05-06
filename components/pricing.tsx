@@ -5,7 +5,7 @@ export default function Pricing() {
   const plans = [
     {
       name: "Basic",
-      price: "$999",
+      price: "$300",
       description: "Perfect for small businesses just getting started",
       features: [
         "5-page responsive website",
@@ -19,7 +19,7 @@ export default function Pricing() {
     },
     {
       name: "Standard",
-      price: "$1,999",
+      price: "$870",
       description: "Ideal for growing businesses with specific needs",
       features: [
         "10-page responsive website",
@@ -35,7 +35,7 @@ export default function Pricing() {
     },
     {
       name: "Premium",
-      price: "$3,999",
+      price: "$1200",
       description: "Comprehensive solution for established businesses",
       features: [
         "Unlimited pages",
