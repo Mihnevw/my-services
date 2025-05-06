@@ -4,6 +4,9 @@ import type React from "react"
 import { useState } from "react"
 import { Eye, EyeOff, Loader2, Shield, Lock, KeyRound } from "lucide-react"
 import { useThemeColor } from "@/contexts/theme-color-context"
+import { supabase } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 type SecurityFormProps = {
   email: string
@@ -22,6 +25,7 @@ export default function SecurityForm({ email }: SecurityFormProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const { currentColor } = useThemeColor()
+  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -68,23 +72,46 @@ export default function SecurityForm({ email }: SecurityFormProps) {
 
     setIsSaving(true)
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      console.log("Password updated", { email, ...formData })
-      setSuccessMessage("Password updated successfully!")
-      setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+      // Verify current password by re-authenticating
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: formData.currentPassword,
       })
-    } catch (error) {
-      console.error("Failed to update password", error)
-      if (error instanceof Error && error.message === "Current password is incorrect") {
-        setErrors((prev) => ({ ...prev, currentPassword: "Current password is incorrect" }))
-      } else {
-        setErrors((prev) => ({ ...prev, form: "Failed to update password. Please try again." }))
+      if (signInError) {
+        setErrors((prev) => ({
+          ...prev,
+          currentPassword: 'Current password is incorrect',
+        }))
+        return
       }
+
+      // Update password via Supabase
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: formData.newPassword,
+      })
+      if (updateError) throw updateError
+
+      // Send notification email
+      const res = await fetch('/api/auth/password-change', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (!res.ok) throw new Error('Failed to send notification email')
+
+      // Show success toast and redirect home
+      toast.success('Password changed successfully!')
+      router.push('/')
+    } catch (error) {
+      console.error('Failed to update password', error)
+      setErrors((prev) => ({
+        ...prev,
+        form:
+          error instanceof Error
+            ? error.message
+            : 'Failed to update password. Please try again.',
+      }))
     } finally {
       setIsSaving(false)
     }

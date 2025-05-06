@@ -50,8 +50,6 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
             href="/"
             className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
-            <ArrowLeft size={18} className="mr-2" />
-            Back to Home
           </Link>
         </div>
 

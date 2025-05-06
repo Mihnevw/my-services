@@ -5,6 +5,10 @@ import { useState } from "react"
 import { Loader2, Bell, Moon, Sun, Mail, Megaphone, GitBranch } from "lucide-react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useTheme } from "next-themes"
+import { supabase } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { useAuth } from "@/contexts/auth-context"
 
 type Preferences = {
   emailNotifications: boolean
@@ -25,16 +29,14 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isSaving, setIsSaving] = useState(false)
-  const [successMessage, setSuccessMessage] = useState("")
+  const router = useRouter()
+  const { user } = useAuth()
   const { currentColor } = useThemeColor()
   const { theme, setTheme } = useTheme()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target
     setFormData((prev) => ({ ...prev, [name]: checked }))
-    if (successMessage) {
-      setSuccessMessage("")
-    }
   }
 
   const handleThemeChange = (newTheme: string) => {
@@ -46,14 +48,35 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
 
     setIsSaving(true)
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      console.log("Preferences updated", formData)
-      setSuccessMessage("Preferences updated successfully!")
+      // Update preferences via Supabase
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: {
+          email_notifications: formData.emailNotifications,
+          marketing_emails: formData.marketingEmails,
+          project_updates: formData.projectUpdates,
+        },
+      })
+      if (updateError) throw updateError
+
+      // Send notification email
+      const res = await fetch('/api/auth/preferences-change', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user?.email, preferences: formData }),
+      })
+      if (!res.ok) throw new Error('Failed to send notification email')
+
+      toast.success('Preferences updated successfully!')
+      router.push('/')
     } catch (error) {
-      console.error("Failed to update preferences", error)
-      setErrors((prev) => ({ ...prev, form: "Failed to update preferences. Please try again." }))
+      console.error('Failed to update preferences', error)
+      setErrors((prev) => ({
+        ...prev,
+        form: error instanceof Error
+          ? error.message
+          : 'Failed to update preferences. Please try again.',
+      }))
     } finally {
       setIsSaving(false)
     }
@@ -209,12 +232,6 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
         {errors.form && (
           <div className="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 p-4 rounded-lg text-sm">
             {errors.form}
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-lg text-sm">
-            {successMessage}
           </div>
         )}
 

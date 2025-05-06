@@ -4,6 +4,10 @@ import type React from "react"
 import { useState } from "react"
 import { Loader2, Twitter, Linkedin, Github, Instagram, Link2 } from "lucide-react"
 import { useThemeColor } from "@/contexts/theme-color-context"
+import { supabase } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+import { useAuth } from "@/contexts/auth-context"
 
 type SocialLinks = {
   twitter: string
@@ -25,8 +29,9 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [isSaving, setIsSaving] = useState(false)
-  const [successMessage, setSuccessMessage] = useState("")
   const { currentColor } = useThemeColor()
+  const router = useRouter()
+  const { user } = useAuth()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -37,9 +42,6 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
         delete newErrors[name]
         return newErrors
       })
-    }
-    if (successMessage) {
-      setSuccessMessage("")
     }
   }
 
@@ -73,14 +75,37 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
 
     setIsSaving(true)
 
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      console.log("Social links updated", formData)
-      setSuccessMessage("Social links updated successfully!")
+      // Update social links in Supabase user metadata
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: {
+          twitter: formData.twitter,
+          linkedin: formData.linkedin,
+          github: formData.github,
+          instagram: formData.instagram,
+        },
+      })
+      if (updateError) throw updateError
+
+      // Send notification email
+      const res = await fetch('/api/auth/social-links-change', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user?.email, socialLinks: formData }),
+      })
+      if (!res.ok) throw new Error('Failed to send notification email')
+
+      // Notify and redirect
+      toast.success('Social links updated successfully!')
+      router.push('/')
     } catch (error) {
-      console.error("Failed to update social links", error)
-      setErrors((prev) => ({ ...prev, form: "Failed to update social links. Please try again." }))
+      console.error('Failed to update social links', error)
+      setErrors((prev) => ({
+        ...prev,
+        form: error instanceof Error
+          ? error.message
+          : 'Failed to update social links. Please try again.',
+      }))
     } finally {
       setIsSaving(false)
     }
@@ -212,12 +237,6 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
         {errors.form && (
           <div className="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 p-4 rounded-lg text-sm">
             {errors.form}
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300 p-4 rounded-lg text-sm">
-            {successMessage}
           </div>
         )}
 
