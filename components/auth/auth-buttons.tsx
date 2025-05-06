@@ -47,7 +47,7 @@ export default function AuthButtons() {
                 <User className="h-4 w-4 text-gray-600 dark:text-gray-300" />
               </div>
               <span className="text-gray-400 dark:text-gray-300 font-medium">
-                {user.email?.split('@')[0]}
+                {user.user_metadata?.full_name || user.email?.split('@')[0]}
               </span>
               <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-300" />
             </button>

@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react"
 import { Play, Pause, Volume2, VolumeX, Subtitles } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useThemeColor } from "@/contexts/theme-color-context"
+import i18n from "@/lib/i18n"
+import useTextToSpeech from "@/hooks/useTextToSpeech"
 
 export default function IntroAnimation() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -21,8 +23,8 @@ export default function IntroAnimation() {
   const [playbackRate, setPlaybackRate] = useState(1)
   const [showBackground, setShowBackground] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const speechRef = useRef<SpeechSynthesisUtterance | null>(null)
   const { currentColor } = useThemeColor()
+  const speak = useTextToSpeech()
 
   const introTexts = [
     "I create beautiful, functional websites that help businesses grow.",
@@ -33,11 +35,6 @@ export default function IntroAnimation() {
   // Initialize speech synthesis and load voices
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      speechRef.current = new SpeechSynthesisUtterance()
-      speechRef.current.rate = playbackRate
-      speechRef.current.pitch = 1
-      speechRef.current.volume = 1
-
       const setupVoices = () => {
         const voices = window.speechSynthesis.getVoices()
         const roboticVoice = voices.find(voice => 
@@ -46,9 +43,10 @@ export default function IntroAnimation() {
           voice.name.includes('Samantha')
         )
         if (roboticVoice) {
-          speechRef.current!.voice = roboticVoice
+          const speechRef = new SpeechSynthesisUtterance()
+          speechRef.voice = roboticVoice
+          setVoicesLoaded(true)
         }
-        setVoicesLoaded(true)
       }
 
       if (window.speechSynthesis.getVoices().length > 0) {
@@ -76,9 +74,6 @@ export default function IntroAnimation() {
       // Handle playback rate changes
       const handleRateChange = () => {
         setPlaybackRate(video.playbackRate)
-        if (speechRef.current) {
-          speechRef.current.rate = video.playbackRate
-        }
       }
 
       // Handle subtitle cue changes
@@ -87,37 +82,14 @@ export default function IntroAnimation() {
         if (track.activeCues && track.activeCues.length > 0) {
           const cue = track.activeCues[0] as VTTCue
           console.log('[CueChange] Cue:', cue.text, {
-            isMuted,
             showSubtitles,
             hasUserInteracted,
             documentHidden: document.hidden,
             voicesLoaded,
-            speechRef: !!speechRef.current,
             windowSpeech: !!window.speechSynthesis
           })
-          if (cue && !isMuted && showSubtitles && hasUserInteracted && !document.hidden) {
-            if (speechRef.current && window.speechSynthesis) {
-              window.speechSynthesis.cancel()
-              speechRef.current.text = cue.text
-              const voices = window.speechSynthesis.getVoices()
-              const roboticVoice = voices.find(voice => 
-                voice.name.includes('Google') || 
-                voice.name.includes('Microsoft') || 
-                voice.name.includes('Samantha')
-              )
-              if (roboticVoice) {
-                speechRef.current.voice = roboticVoice
-              }
-              if (voicesLoaded) {
-                console.log('[CueChange] Speaking:', cue.text)
-                window.speechSynthesis.speak(speechRef.current)
-              } else {
-                console.log('[CueChange] Voices not loaded, pending:', cue.text)
-                setPendingSpeech(cue.text)
-              }
-            } else {
-              console.log('[CueChange] Speech synthesis not available')
-            }
+          if (cue && showSubtitles && hasUserInteracted && !document.hidden) {
+            speak(cue.text)
           } else {
             console.log('[CueChange] Conditions not met for speech')
           }
@@ -156,17 +128,14 @@ export default function IntroAnimation() {
 
   // If voices load after a cue was missed, speak it
   useEffect(() => {
-    if (voicesLoaded && pendingSpeech && speechRef.current && window.speechSynthesis && hasUserInteracted && !document.hidden) {
+    if (voicesLoaded && pendingSpeech && hasUserInteracted && !document.hidden) {
       console.log('[Effect] Speaking pending speech:', pendingSpeech)
-      window.speechSynthesis.cancel()
-      speechRef.current.text = pendingSpeech
-      window.speechSynthesis.speak(speechRef.current)
+      speak(pendingSpeech)
       setPendingSpeech(null)
     } else if (pendingSpeech) {
       console.log('[Effect] Pending speech not spoken, conditions not met:', {
         voicesLoaded,
         pendingSpeech,
-        speechRef: !!speechRef.current,
         windowSpeech: !!window.speechSynthesis,
         hasUserInteracted,
         documentHidden: document.hidden
@@ -219,6 +188,8 @@ export default function IntroAnimation() {
       if (currentTime < videoDuration && isPlaying) {
         animationFrame = requestAnimationFrame(animate)
       } else if (currentTime >= videoDuration) {
+        // Pause the video at the end so UI and speech sync correctly
+        videoRef.current?.pause()
         setIsPlaying(false)
         if (window.speechSynthesis) {
           window.speechSynthesis.cancel()
@@ -228,12 +199,6 @@ export default function IntroAnimation() {
 
     if (isPlaying) {
       animationFrame = requestAnimationFrame(animate)
-      videoRef.current?.play()
-    } else {
-      videoRef.current?.pause()
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
     }
 
     return () => {
@@ -247,40 +212,61 @@ export default function IntroAnimation() {
   }, [isPlaying, introTexts, videoDuration, isMuted, showSubtitles, isVideoReady])
 
   const handleUserInteraction = () => {
-    if (!hasUserInteracted) setHasUserInteracted(true)
+    if (!hasUserInteracted) {
+      setHasUserInteracted(true)
+      // Unmute the video for audio playback
+      setIsMuted(false)
+      // Resume speech synthesis context
+      window.speechSynthesis?.resume()
+    }
   }
 
-  const togglePlay = () => {
-    handleUserInteraction()
-    if (!isVideoReady) return
+  // Speak the current active subtitle cue via speechSynthesis
+  const speakCurrentCue = () => {
+    const track = videoRef.current?.textTracks[0]
+    const cue = track?.activeCues?.[0] as VTTCue | undefined
+    if (cue) {
+      speak(cue.text)
+    }
+  }
 
-    if (currentTime >= videoDuration) {
+  // When i18n finishes initializing, speak the current cue (e.g. on first load)
+  useEffect(() => {
+    const initHandler = () => speakCurrentCue()
+    i18n.on('initialized', initHandler)
+    return () => {
+      i18n.off('initialized', initHandler)
+    }
+  }, [])
+
+  const togglePlay = () => {
+    window.speechSynthesis?.resume()
+    handleUserInteraction()
+    if (!isVideoReady || !videoRef.current) return
+
+    // If video ended, reset to start on next play
+    if (!isPlaying && currentTime >= videoDuration) {
+      videoRef.current.currentTime = 0
+      setCurrentTime(0)
       setProgress(0)
       setCurrentTextIndex(0)
       setDisplayText("")
-      setCurrentTime(0)
       setShowBackground(true)
-      if (videoRef.current) {
-        videoRef.current.currentTime = 0
-      }
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
     }
-    setIsPlaying((prev) => {
-      const newPlaying = !prev
-      if (newPlaying) {
-        setShowBackground(false)
-        // If playing and there is a pending speech, trigger it
-        if (pendingSpeech && voicesLoaded && speechRef.current && window.speechSynthesis) {
-          window.speechSynthesis.cancel()
-          speechRef.current.text = pendingSpeech
-          window.speechSynthesis.speak(speechRef.current)
-          setPendingSpeech(null)
-        }
-      }
-      return newPlaying
-    })
+
+    const newPlaying = !isPlaying
+    setIsPlaying(newPlaying)
+    if (newPlaying) {
+      // Initialize and resume audio context
+      const audioCtx = new AudioContext()
+      audioCtx.resume()
+      videoRef.current.play()
+      setShowBackground(false)
+      speakCurrentCue()
+    } else {
+      videoRef.current.pause()
+      window.speechSynthesis?.cancel()
+    }
   }
 
   const toggleMute = () => {
@@ -346,56 +332,6 @@ export default function IntroAnimation() {
     setProgress(percent * 100)
   }
 
-  // Helper to speak the current active cue
-  const speakCurrentCue = () => {
-    const video = videoRef.current
-    if (!video || !video.textTracks || !video.textTracks[0]) {
-      console.log('[SpeakCurrentCue] No video or text track')
-      return
-    }
-    const track = video.textTracks[0]
-    if (track.activeCues && track.activeCues.length > 0) {
-      const cue = track.activeCues[0] as VTTCue
-      console.log('[SpeakCurrentCue] Cue:', cue.text, {
-        isMuted,
-        showSubtitles,
-        hasUserInteracted,
-        documentHidden: document.hidden,
-        voicesLoaded,
-        speechRef: !!speechRef.current,
-        windowSpeech: !!window.speechSynthesis
-      })
-      if (cue && !isMuted && showSubtitles && hasUserInteracted && !document.hidden) {
-        if (speechRef.current && window.speechSynthesis) {
-          window.speechSynthesis.cancel()
-          speechRef.current.text = cue.text
-          const voices = window.speechSynthesis.getVoices()
-          const roboticVoice = voices.find(voice => 
-            voice.name.includes('Google') || 
-            voice.name.includes('Microsoft') || 
-            voice.name.includes('Samantha')
-          )
-          if (roboticVoice) {
-            speechRef.current.voice = roboticVoice
-          }
-          if (voicesLoaded) {
-            console.log('[SpeakCurrentCue] Speaking:', cue.text)
-            window.speechSynthesis.speak(speechRef.current)
-          } else {
-            console.log('[SpeakCurrentCue] Voices not loaded, pending:', cue.text)
-            setPendingSpeech(cue.text)
-          }
-        } else {
-          console.log('[SpeakCurrentCue] Speech synthesis not available')
-        }
-      } else {
-        console.log('[SpeakCurrentCue] Conditions not met for speech')
-      }
-    } else {
-      console.log('[SpeakCurrentCue] No active cues')
-    }
-  }
-
   // Sync speech with subtitles after seeking or time changes
   useEffect(() => {
     const video = videoRef.current
@@ -407,12 +343,17 @@ export default function IntroAnimation() {
       speakCurrentCue()
     }
     video.addEventListener('seeked', handleSyncSpeech)
-    video.addEventListener('timeupdate', handleSyncSpeech)
     return () => {
       video.removeEventListener('seeked', handleSyncSpeech)
-      video.removeEventListener('timeupdate', handleSyncSpeech)
     }
   }, [isMuted, showSubtitles, hasUserInteracted, voicesLoaded])
+
+  // Speak typed text segments on each segment change while playing
+  useEffect(() => {
+    if (isPlaying && voicesLoaded && hasUserInteracted && !document.hidden) {
+      speak(introTexts[currentTextIndex])
+    }
+  }, [currentTextIndex, isPlaying, voicesLoaded, hasUserInteracted])
 
   return (
     <section className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
@@ -460,7 +401,6 @@ export default function IntroAnimation() {
                 showBackground ? 'opacity-0' : 'opacity-100'
               }`}
               muted={isMuted}
-              loop
               playsInline
             >
               <source src="/intro.mp4" type="video/mp4" />

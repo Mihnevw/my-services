@@ -8,6 +8,7 @@ import ScrollProgress from "@/components/scroll-progress";
 import TargetAudience from "@/components/target-audience";
 import IntroAnimation from "@/components/intro-animation";
 import ServicesPreview from "@/components/services-preview";
+import VideoPlayer from "@/components/VideoPlayer";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
       <Hero />
+      <VideoPlayer src="/intro.mp4" />
       <IntroAnimation />
       <TargetAudience />
       <ServicesPreview />

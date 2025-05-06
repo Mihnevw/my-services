@@ -4,13 +4,15 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeColorProvider } from "@/contexts/theme-color-context"
 import { AuthProvider } from "@/contexts/auth-context"
 import { Toaster } from "@/components/ui/sonner"
+import ClientProviders from "../components/ClientProviders"
+import 'focus-visible'
 import { ReactNode } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Portfolio Website",
-  description: "A modern portfolio website with a clean design",
+  title: "Future of Your Business",
+  description: "A modern Future of Your Business website with a clean design",
   generator: 'v0.dev',
   icons: {
     icon: '/favicon.png',
@@ -28,8 +30,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <ThemeColorProvider>
           <AuthProvider>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-              {children}
-              <Toaster />
+              <ClientProviders>
+                {children}
+                <Toaster />
+              </ClientProviders>
             </ThemeProvider>
           </AuthProvider>
         </ThemeColorProvider>
