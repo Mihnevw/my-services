@@ -1,21 +1,22 @@
-import "./globals.css"
-import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import { ThemeColorProvider } from "@/contexts/theme-color-context"
-import { AuthProvider } from "@/contexts/auth-context"
-import { Toaster } from "@/components/ui/sonner"
-import ClientProviders from "../components/ClientProviders"
-import 'focus-visible'
-import { ReactNode } from "react"
+import "./globals.css";
+import "focus-visible";
+
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeColorProvider } from "@/contexts/theme-color-context";
+import { AuthProvider } from "@/contexts/auth-context";
+import { Toaster } from "@/components/ui/toaster";
+import { ReactNode } from "react";
+import ClientProviders from "../components/ClientProviders";
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
-  title: "Future of Your Business",
+export const metadata: Metadata = {
+  title: "Modern Website",
   description: "A modern Future of Your Business website with a clean design",
-  generator: 'v0.dev',
   icons: {
-    icon: '/favicon.png',
+    icon: "/favicon.png",
   },
 }
 
@@ -27,16 +28,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeColorProvider>
-          <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ThemeColorProvider>
+            <AuthProvider>
               <ClientProviders>
                 {children}
                 <Toaster />
               </ClientProviders>
-            </ThemeProvider>
-          </AuthProvider>
-        </ThemeColorProvider>
+            </AuthProvider>
+          </ThemeColorProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

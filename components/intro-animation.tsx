@@ -1,199 +1,114 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { Play, Pause, Volume2, VolumeX, Subtitles } from "lucide-react"
+import { Play, Pause, Volume2, VolumeX, Mic, MicOff } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useThemeColor } from "@/contexts/theme-color-context"
-import i18n from "@/lib/i18n"
-import useTextToSpeech from "@/hooks/useTextToSpeech"
+import Image from "next/image"
+import Speakit from "@/lib/speakit"
+
+// Define subtitle type
+type Subtitle = {
+  start: number // in seconds
+  end: number // in seconds
+  text: string
+}
 
 export default function IntroAnimation() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true)
-  const [showSubtitles, setShowSubtitles] = useState(true)
-  const [currentTextIndex, setCurrentTextIndex] = useState(0)
+  const [isSpeechEnabled, setIsSpeechEnabled] = useState(false)
   const [displayText, setDisplayText] = useState("")
   const [progress, setProgress] = useState(0)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [videoDuration, setVideoDuration] = useState(0)
-  const [isVideoReady, setIsVideoReady] = useState(false)
-  const [voicesLoaded, setVoicesLoaded] = useState(false)
-  const [pendingSpeech, setPendingSpeech] = useState<string | null>(null)
-  const [hasUserInteracted, setHasUserInteracted] = useState(false)
-  const [playbackRate, setPlaybackRate] = useState(1)
-  const [showBackground, setShowBackground] = useState(true)
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const [subtitles, setSubtitles] = useState<Subtitle[]>([])
+  const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(-1)
+  const videoRef = useRef<HTMLDivElement>(null)
   const { currentColor } = useThemeColor()
-  const speak = useTextToSpeech()
+  const lastSpokenTimeRef = useRef<number>(0)
+  const COOLDOWN_MS = 100 // Reduced cooldown to ensure smoother transitions
 
-  const introTexts = [
-    "I create beautiful, functional websites that help businesses grow.",
-    "From concept to launch, I handle every aspect of your digital presence.",
-    "Let's work together to bring your vision to life and reach your audience.",
-  ]
+  const totalDuration = 30 // seconds
 
-  // Initialize speech synthesis and load voices
+  // Initialize Speakit
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      const setupVoices = () => {
-        const voices = window.speechSynthesis.getVoices()
-        const roboticVoice = voices.find(voice => 
-          voice.name.includes('Google') || 
-          voice.name.includes('Microsoft') || 
-          voice.name.includes('Samantha')
-        )
-        if (roboticVoice) {
-          const speechRef = new SpeechSynthesisUtterance()
-          speechRef.voice = roboticVoice
-          setVoicesLoaded(true)
-        }
-      }
-
-      if (window.speechSynthesis.getVoices().length > 0) {
-        setupVoices()
-      } else {
-        window.speechSynthesis.onvoiceschanged = setupVoices
-      }
+    if (typeof window !== "undefined") {
+      Speakit.getVoices().catch(error => {
+        console.error("Failed to initialize Speakit:", error)
+      })
     }
   }, [])
 
-  // Handle video loading and initialization
+  // Load and parse VTT file
   useEffect(() => {
-    const video = videoRef.current
-    if (video) {
-      const handleLoadedMetadata = () => {
-        setVideoDuration(Math.floor(video.duration))
-        setIsVideoReady(true)
-        setPlaybackRate(video.playbackRate)
-      }
-
-      const handleCanPlay = () => {
-        setIsVideoReady(true)
-      }
-
-      // Handle playback rate changes
-      const handleRateChange = () => {
-        setPlaybackRate(video.playbackRate)
-      }
-
-      // Handle subtitle cue changes
-      const handleCueChange = (event: Event) => {
-        const track = event.target as TextTrack
-        if (track.activeCues && track.activeCues.length > 0) {
-          const cue = track.activeCues[0] as VTTCue
-          console.log('[CueChange] Cue:', cue.text, {
-            showSubtitles,
-            hasUserInteracted,
-            documentHidden: document.hidden,
-            voicesLoaded,
-            windowSpeech: !!window.speechSynthesis
-          })
-          if (cue && showSubtitles && hasUserInteracted && !document.hidden) {
-            speak(cue.text)
-          } else {
-            console.log('[CueChange] Conditions not met for speech')
-          }
-        }
-      }
-
-      video.addEventListener('loadedmetadata', handleLoadedMetadata)
-      video.addEventListener('canplay', handleCanPlay)
-      video.addEventListener('ratechange', handleRateChange)
-
-      // Always (re)attach cuechange handler and set track mode on mount and when showSubtitles changes
-      const textTrack = video.textTracks[0]
-      if (textTrack) {
-        textTrack.mode = showSubtitles ? 'showing' : 'hidden'
-        textTrack.removeEventListener('cuechange', handleCueChange)
-        textTrack.addEventListener('cuechange', handleCueChange)
-      }
-
-      if (video.readyState >= 2) {
-        handleLoadedMetadata()
-      }
-
-      return () => {
-        video.removeEventListener('loadedmetadata', handleLoadedMetadata)
-        video.removeEventListener('canplay', handleCanPlay)
-        video.removeEventListener('ratechange', handleRateChange)
-        if (textTrack) {
-          textTrack.removeEventListener('cuechange', handleCueChange)
-        }
-        if (window.speechSynthesis) {
-          window.speechSynthesis.cancel()
-        }
+    const fetchSubtitles = async () => {
+      try {
+        const response = await fetch("/subtitles.vtt")
+        const text = await response.text()
+        const parsedSubtitles = parseVTT(text)
+        setSubtitles(parsedSubtitles)
+      } catch (error) {
+        console.error("Failed to load subtitles:", error)
+        // Fallback to hardcoded subtitles if VTT file can't be loaded
+        setSubtitles([
+          { start: 0, end: 10, text: "I create beautiful, functional websites that help businesses grow." },
+          { start: 10, end: 20, text: "From concept to launch, I handle every aspect of your digital presence." },
+          { start: 20, end: 30, text: "Let's work together to bring your vision to life and reach your audience." },
+        ])
       }
     }
-  }, [isMuted, showSubtitles, voicesLoaded, hasUserInteracted])
 
-  // If voices load after a cue was missed, speak it
+    fetchSubtitles()
+  }, [])
+
+  // Animation and subtitle display logic
   useEffect(() => {
-    if (voicesLoaded && pendingSpeech && hasUserInteracted && !document.hidden) {
-      console.log('[Effect] Speaking pending speech:', pendingSpeech)
-      speak(pendingSpeech)
-      setPendingSpeech(null)
-    } else if (pendingSpeech) {
-      console.log('[Effect] Pending speech not spoken, conditions not met:', {
-        voicesLoaded,
-        pendingSpeech,
-        windowSpeech: !!window.speechSynthesis,
-        hasUserInteracted,
-        documentHidden: document.hidden
-      })
-    }
-  }, [voicesLoaded, pendingSpeech, hasUserInteracted])
-
-  useEffect(() => {
-    if (!isVideoReady) return
-
     let animationFrame: number
     let startTime: number
-    let textStartTime: number
-    let currentIndex = 0
-    const typingSpeed = 50 // ms per character
+    let lastSubtitleIndex = -1
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp
-      if (!textStartTime) textStartTime = timestamp
 
-      // Update current time based on video's actual time
-      if (videoRef.current) {
-        const currentVideoTime = videoRef.current.currentTime
-        setCurrentTime(Math.floor(currentVideoTime))
-        const progressPercent = (currentVideoTime / videoDuration) * 100
-        setProgress(progressPercent)
-      }
+      const elapsedTotal = timestamp - startTime
+      const progressPercent = Math.min((elapsedTotal / (totalDuration * 1000)) * 100, 100)
+      const currentTimeInSeconds = elapsedTotal / 1000
 
-      const elapsedText = timestamp - textStartTime
-      const textIndex = Math.min(Math.floor((currentTime / videoDuration) * introTexts.length), introTexts.length - 1)
+      setProgress(progressPercent)
 
-      if (textIndex !== currentIndex) {
-        currentIndex = textIndex
-        setCurrentTextIndex(currentIndex)
-        textStartTime = timestamp
+      // Find the current subtitle based on elapsed time
+      const subtitleIndex = subtitles.findIndex(
+        (sub) => currentTimeInSeconds >= sub.start && currentTimeInSeconds < sub.end
+      )
+
+      // If we found a subtitle and it's different from the current one
+      if (subtitleIndex !== -1 && subtitleIndex !== lastSubtitleIndex) {
+        lastSubtitleIndex = subtitleIndex
+        setCurrentSubtitleIndex(subtitleIndex)
+        setDisplayText(subtitles[subtitleIndex].text)
+
+        // Speak the subtitle if speech is enabled
+        if (isSpeechEnabled) {
+          const now = Date.now()
+          if (now - lastSpokenTimeRef.current >= COOLDOWN_MS) {
+            Speakit.readText(subtitles[subtitleIndex].text).catch(error => {
+              console.error("Failed to speak text:", error)
+            })
+            lastSpokenTimeRef.current = now
+          }
+        }
+      } else if (subtitleIndex === -1 && lastSubtitleIndex !== -1) {
+        // No subtitle for current time
+        lastSubtitleIndex = -1
+        setCurrentSubtitleIndex(-1)
         setDisplayText("")
       }
 
-      if (currentIndex >= 0 && currentIndex < introTexts.length) {
-        const currentFullText = introTexts[currentIndex]
-        if (currentFullText) {
-          const charactersToShow = Math.min(Math.floor(elapsedText / typingSpeed), currentFullText.length)
-          const newDisplayText = currentFullText.substring(0, charactersToShow)
-          if (newDisplayText !== displayText) {
-            setDisplayText(newDisplayText)
-          }
-        }
-      }
-
-      if (currentTime < videoDuration && isPlaying) {
+      // Continue animation if not complete
+      if (progressPercent < 100 && isPlaying) {
         animationFrame = requestAnimationFrame(animate)
-      } else if (currentTime >= videoDuration) {
-        // Pause the video at the end so UI and speech sync correctly
-        videoRef.current?.pause()
+      } else if (progressPercent >= 100) {
         setIsPlaying(false)
-        if (window.speechSynthesis) {
-          window.speechSynthesis.cancel()
-        }
+        Speakit.stopSpeaking()
       }
     }
 
@@ -205,155 +120,99 @@ export default function IntroAnimation() {
       if (animationFrame) {
         cancelAnimationFrame(animationFrame)
       }
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
     }
-  }, [isPlaying, introTexts, videoDuration, isMuted, showSubtitles, isVideoReady])
-
-  const handleUserInteraction = () => {
-    if (!hasUserInteracted) {
-      setHasUserInteracted(true)
-      // Unmute the video for audio playback
-      setIsMuted(false)
-      // Resume speech synthesis context
-      window.speechSynthesis?.resume()
-    }
-  }
-
-  // Speak the current active subtitle cue via speechSynthesis
-  const speakCurrentCue = () => {
-    const track = videoRef.current?.textTracks[0]
-    const cue = track?.activeCues?.[0] as VTTCue | undefined
-    if (cue) {
-      speak(cue.text)
-    }
-  }
-
-  // When i18n finishes initializing, speak the current cue (e.g. on first load)
-  useEffect(() => {
-    const initHandler = () => speakCurrentCue()
-    i18n.on('initialized', initHandler)
-    return () => {
-      i18n.off('initialized', initHandler)
-    }
-  }, [])
+  }, [isPlaying, subtitles, isSpeechEnabled, totalDuration])
 
   const togglePlay = () => {
-    window.speechSynthesis?.resume()
-    handleUserInteraction()
-    if (!isVideoReady || !videoRef.current) return
-
-    // If video ended, reset to start on next play
-    if (!isPlaying && currentTime >= videoDuration) {
-      videoRef.current.currentTime = 0
-      setCurrentTime(0)
+    if (progress >= 100) {
+      // Reset if completed
       setProgress(0)
-      setCurrentTextIndex(0)
+      setCurrentSubtitleIndex(-1)
       setDisplayText("")
-      setShowBackground(true)
+      lastSpokenTimeRef.current = 0
     }
 
-    const newPlaying = !isPlaying
-    setIsPlaying(newPlaying)
-    if (newPlaying) {
-      // Initialize and resume audio context
-      const audioCtx = new AudioContext()
-      audioCtx.resume()
-      videoRef.current.play()
-      setShowBackground(false)
-      speakCurrentCue()
-    } else {
-      videoRef.current.pause()
-      window.speechSynthesis?.cancel()
+    if (!isPlaying && isSpeechEnabled && currentSubtitleIndex !== -1) {
+      // If we're starting playback and speech is enabled, speak the current subtitle
+      Speakit.readText(subtitles[currentSubtitleIndex].text).catch(error => {
+        console.error("Failed to speak text:", error)
+      })
+    } else if (isPlaying) {
+      // If we're pausing, cancel any ongoing speech
+      Speakit.stopSpeaking()
     }
+
+    setIsPlaying(!isPlaying)
   }
 
   const toggleMute = () => {
-    handleUserInteraction()
     setIsMuted(!isMuted)
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel()
-    }
   }
 
-  const toggleSubtitles = () => {
-    handleUserInteraction()
-    setShowSubtitles((prev) => {
-      const newShow = !prev
-      // Hide or show the native subtitle track
-      const video = videoRef.current
-      if (video && video.textTracks && video.textTracks[0]) {
-        video.textTracks[0].mode = newShow ? 'showing' : 'hidden'
-      }
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
-      return newShow
-    })
+  const toggleSpeech = () => {
+    if (isSpeechEnabled) {
+      // Cancel speech when disabling
+      Speakit.stopSpeaking()
+    } else if (!isSpeechEnabled && isPlaying && currentSubtitleIndex !== -1) {
+      // Start speaking current subtitle when enabling during playback
+      Speakit.readText(subtitles[currentSubtitleIndex].text).catch(error => {
+        console.error("Failed to speak text:", error)
+      })
+    }
+
+    setIsSpeechEnabled(!isSpeechEnabled)
   }
 
-  // Cancel speech if tab is not visible
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden && window.speechSynthesis) {
-        window.speechSynthesis.cancel()
+  // Parse VTT file content
+  const parseVTT = (vttContent: string): Subtitle[] => {
+    const lines = vttContent.trim().split("\n")
+    const parsedSubtitles: Subtitle[] = []
+
+    // Skip the WEBVTT header
+    let i = 1
+    while (i < lines.length) {
+      // Skip empty lines
+      if (!lines[i].trim()) {
+        i++
+        continue
+      }
+
+      // Parse timestamp line (e.g., "00:00:01.000 --> 00:00:05.000")
+      const timestampMatch = lines[i].match(/(\d+):(\d+):(\d+)\.(\d+)\s+-->\s+(\d+):(\d+):(\d+)\.(\d+)/)
+      if (timestampMatch) {
+        const startHours = Number.parseInt(timestampMatch[1])
+        const startMinutes = Number.parseInt(timestampMatch[2])
+        const startSeconds = Number.parseInt(timestampMatch[3])
+        const startMilliseconds = Number.parseInt(timestampMatch[4])
+
+        const endHours = Number.parseInt(timestampMatch[5])
+        const endMinutes = Number.parseInt(timestampMatch[6])
+        const endSeconds = Number.parseInt(timestampMatch[7])
+        const endMilliseconds = Number.parseInt(timestampMatch[8])
+
+        const startTime = startHours * 3600 + startMinutes * 60 + startSeconds + startMilliseconds / 1000
+        const endTime = endHours * 3600 + endMinutes * 60 + endSeconds + endMilliseconds / 1000
+
+        // Get the subtitle text (may span multiple lines)
+        i++
+        let subtitleText = ""
+        while (i < lines.length && lines[i].trim() && !lines[i].includes("-->")) {
+          subtitleText += (subtitleText ? " " : "") + lines[i].trim()
+          i++
+        }
+
+        parsedSubtitles.push({
+          start: startTime,
+          end: endTime,
+          text: subtitleText,
+        })
+      } else {
+        i++
       }
     }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
-  }, [])
 
-  // Keyboard controls for rewind/forward
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isVideoReady || !videoRef.current) return
-      if (e.key === 'ArrowLeft') {
-        videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 5)
-      } else if (e.key === 'ArrowRight') {
-        videoRef.current.currentTime = Math.min(videoDuration, videoRef.current.currentTime + 5)
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isVideoReady, videoDuration])
-
-  // Clickable progress bar
-  const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!isVideoReady || !videoRef.current) return
-    const rect = (e.target as HTMLDivElement).getBoundingClientRect()
-    const clickX = e.clientX - rect.left
-    const percent = clickX / rect.width
-    const newTime = percent * videoDuration
-    videoRef.current.currentTime = newTime
-    setCurrentTime(Math.floor(newTime))
-    setProgress(percent * 100)
+    return parsedSubtitles
   }
-
-  // Sync speech with subtitles after seeking or time changes
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    const handleSyncSpeech = () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel()
-      }
-      speakCurrentCue()
-    }
-    video.addEventListener('seeked', handleSyncSpeech)
-    return () => {
-      video.removeEventListener('seeked', handleSyncSpeech)
-    }
-  }, [isMuted, showSubtitles, hasUserInteracted, voicesLoaded])
-
-  // Speak typed text segments on each segment change while playing
-  useEffect(() => {
-    if (isPlaying && voicesLoaded && hasUserInteracted && !document.hidden) {
-      speak(introTexts[currentTextIndex])
-    }
-  }, [currentTextIndex, isPlaying, voicesLoaded, hasUserInteracted])
 
   return (
     <section className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
@@ -371,121 +230,132 @@ export default function IntroAnimation() {
         </AnimatedSection>
 
         <AnimatedSection delay={200}>
-          <div className="relative max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl aspect-video">
-            {/* Background image */}
-            <div 
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                showBackground ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{
-                backgroundImage: 'url("/background.jpg")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-            >
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <button
-                  onClick={togglePlay}
-                  className="bg-white/20 hover:bg-white/30 text-white rounded-full p-4 transition-colors transform hover:scale-110"
-                  aria-label="Play video"
-                >
-                  <Play size={40} />
-                </button>
-              </div>
-            </div>
+          <div ref={videoRef} className="relative max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
+            {/* Video simulation container */}
+            <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 relative">
+              {/* Background image (visible when not playing) */}
+              {!isPlaying && (
+                <div className="absolute inset-0 z-10">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src="/placeholder.svg?height=720&width=1280"
+                      alt="Web development workspace"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 to-gray-800/70"></div>
 
-            {/* Real video */}
-            <video
-              ref={videoRef}
-              className={`w-full h-full object-cover transition-opacity duration-1000 ${
-                showBackground ? 'opacity-0' : 'opacity-100'
-              }`}
-              muted={isMuted}
-              playsInline
-            >
-              <source src="/intro.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-              <track
-                default
-                kind="subtitles"
-                srcLang="en"
-                label="English"
-                src="/subtitles.vtt"
-              />
-            </video>
+                    {/* Play button overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <button
+                        onClick={togglePlay}
+                        className="bg-white/20 hover:bg-white/30 text-white rounded-full p-8 transition-all duration-300 transform hover:scale-110 group"
+                        aria-label="Play video"
+                      >
+                        <Play size={40} className="group-hover:text-blue-400 transition-colors" />
+                      </button>
+                    </div>
 
-            {/* Animated colored background blurs */}
-            <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-              <div
-                className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse-slow"
-                style={{ background: currentColor.primary }}
-              ></div>
-              <div
-                className="absolute bottom-1/4 right-1/3 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
-                style={{ background: currentColor.secondary, animationDelay: "1s" }}
-              ></div>
-              <div
-                className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-3xl animate-pulse-slow"
-                style={{ background: currentColor.accent, animationDelay: "2s" }}
-              ></div>
-            </div>
+                    {/* Title overlay */}
+                    <div className="absolute bottom-8 left-0 right-0 text-center">
+                      <h3 className="text-white text-2xl md:text-3xl font-bold px-4">
+                        Discover How I Can Transform Your Online Presence
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
 
-            {/* Typing text */}
-            {showSubtitles && (
-              <div className="absolute inset-0 flex items-center justify-center p-8 z-10 bg-black/30">
-                <h3 className="text-white text-2xl md:text-4xl font-bold mb-6 min-h-[120px] flex items-center justify-center">
-                  {displayText}
-                  <span className={`ml-1 inline-block w-2 h-8 bg-white ${isPlaying ? "animate-pulse" : "opacity-0"}`}></span>
-                </h3>
-              </div>
-            )}
-
-            {/* Progress bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700 z-20">
-              <div
-                className="h-full transition-all duration-300 ease-linear"
-                style={{
-                  width: `${progress}%`,
-                  background: `linear-gradient(to right, ${currentColor.secondary}, ${currentColor.primary})`,
-                }}
-                onClick={handleProgressBarClick}
-              ></div>
-            </div>
-
-            {/* Controls */}
-            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center z-20">
-              <button
-                onClick={togglePlay}
-                className="bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
-                aria-label={isPlaying ? "Pause" : "Play"}
-              >
-                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              </button>
-
-              <div className="text-white/80 text-sm">
-                {currentTime}s / {videoDuration}s
+              {/* Animated background elements (visible when playing) */}
+              <div className={`absolute inset-0 overflow-hidden opacity-20 ${!isPlaying && "hidden"}`}>
+                <div
+                  className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl animate-pulse-slow"
+                  style={{ background: currentColor.primary }}
+                ></div>
+                <div
+                  className="absolute bottom-1/4 right-1/3 w-96 h-96 rounded-full blur-3xl animate-pulse-slow"
+                  style={{ background: currentColor.secondary, animationDelay: "1s" }}
+                ></div>
+                <div
+                  className="absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-3xl animate-pulse-slow"
+                  style={{ background: currentColor.accent, animationDelay: "2s" }}
+                ></div>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  onClick={toggleSubtitles}
-                  className="bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
-                  aria-label={showSubtitles ? "Hide subtitles" : "Show subtitles"}
-                >
-                  <Subtitles size={20} className={showSubtitles ? "text-blue-400" : ""} />
-                </button>
+              {/* Text content (visible when playing) */}
+              {isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
+                  <div className="text-center">
+                    <h3 className="text-white text-2xl md:text-4xl font-bold mb-6 min-h-[120px] flex items-center justify-center">
+                      {displayText}
+                      <span
+                        className={`ml-1 inline-block w-2 h-8 bg-white ${isPlaying ? "animate-pulse" : "opacity-0"}`}
+                      ></span>
+                    </h3>
+                  </div>
+                </div>
+              )}
 
-                <button
-                  onClick={toggleMute}
-                  className="bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
-                  aria-label={isMuted ? "Unmute" : "Mute"}
-                >
-                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                </button>
+              {/* Progress bar */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700 z-30">
+                <div
+                  className="h-full transition-all duration-300 ease-linear"
+                  style={{
+                    width: `${progress}%`,
+                    background: `linear-gradient(to right, ${currentColor.secondary}, ${currentColor.primary})`,
+                  }}
+                ></div>
+              </div>
+
+              {/* Controls */}
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center z-30">
+                {isPlaying && (
+                  <>
+                    <button
+                      onClick={togglePlay}
+                      className="bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
+                      aria-label={isPlaying ? "Pause" : "Play"}
+                    >
+                      {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                    </button>
+
+                    <div className="text-white/80 text-sm">
+                      {Math.floor((progress / 100) * totalDuration)}s / {totalDuration}s
+                    </div>
+
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={toggleMute}
+                        className="bg-white/20 hover:bg-white/30 text-white rounded-full p-2 transition-colors"
+                        aria-label={isMuted ? "Unmute" : "Mute"}
+                      >
+                        {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                      </button>
+
+                      <button
+                        onClick={toggleSpeech}
+                        className={`${
+                          isSpeechEnabled ? "bg-blue-600/70" : "bg-white/20"
+                        } hover:bg-white/30 text-white rounded-full p-2 transition-colors`}
+                        aria-label={isSpeechEnabled ? "Disable speech" : "Enable speech"}
+                      >
+                        {isSpeechEnabled ? <Mic size={20} /> : <MicOff size={20} />}
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </AnimatedSection>
+
+        {/* Speech status indicator */}
+        {isSpeechEnabled && (
+          <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center">
+            <Mic className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
+            Text-to-speech is enabled. Subtitles will be spoken aloud.
+          </div>
+        )}
       </div>
     </section>
   )
