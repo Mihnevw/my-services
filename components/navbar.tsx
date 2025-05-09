@@ -7,8 +7,11 @@ import { Menu, X } from "lucide-react"
 import ThemeToggle from "@/components/theme-toggle"
 import ThemeColorPicker from "@/components/theme-color-picker"
 import AuthButtons from "@/components/auth/auth-buttons"
+import LanguageSelector from "@/components/language-selector"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Navbar() {
+  const { t } = useLanguage()  // Use the translation function from language context
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -30,14 +33,14 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "Projects", href: "/projects" },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Testimonials", href: "/testimonials" },
-    { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
+    { name: t("home"), href: "/" },
+    { name: t("about"), href: "/about" },
+    { name: t("services"), href: "/services" },
+    { name: t("projects"), href: "/projects" },
+    { name: t("pricing"), href: "/pricing" },
+    { name: t("testimonials"), href: "/testimonials" },
+    { name: t("blog"), href: "/blog" },
+    { name: t("contact"), href: "/contact" },
   ]
 
   return (
@@ -71,6 +74,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center space-x-3">
+            <LanguageSelector />
             <ThemeToggle />
             <ThemeColorPicker />
             <AuthButtons />
@@ -97,6 +101,7 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-2 flex items-center space-x-3">
+                <LanguageSelector />
                 <ThemeColorPicker />
                 <ThemeToggle />
               </div>

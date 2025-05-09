@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import { useTextToSpeech } from '@/hooks/useTextToSpeech'
+import { useLanguage } from '@/contexts/language-context'
 
 interface Subtitle {
   start: number
@@ -15,12 +16,17 @@ export default function VideoPlayerWithTTS({ src }: { src: string }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const playerRef = useRef<any>(null)
   const [subtitles, setSubtitles] = useState<Subtitle[]>([])
-  const currentSubtitleIndex = useRef(-1)
+  const lastSubtitleIndex = useRef(-1)
+  const lastSpokenTimeRef = useRef<number>(0)
+  const COOLDOWN_MS = 100 // Reduced cooldown to ensure smoother transitions
   const { speak, cancel, isLoaded } = useTextToSpeech()
+  const { language, t } = useLanguage()
 
-  // Load and parse subtitles
+  // Load and parse subtitles based on current language
   useEffect(() => {
-    fetch('/subtitles.vtt')
+    const subtitleFile = language.code === 'bg' ? '/subtitles_bg.vtt' : '/subtitles.vtt'
+    
+    fetch(subtitleFile)
       .then(response => response.text())
       .then(text => {
         const lines = text.split('\n')
@@ -70,16 +76,14 @@ export default function VideoPlayerWithTTS({ src }: { src: string }) {
         setSubtitles(parsedSubtitles)
       })
       .catch(error => console.error('Error loading subtitles:', error))
-  }, [])
+  }, [language])
 
   // Initialize video.js
   useEffect(() => {
     if (videoRef.current && !playerRef.current) {
+      console.log('✅ videoRef is ready:', videoRef.current)
       const options = {
-        sources: [{
-          src,
-          type: 'video/mp4'
-        }],
+        sources: [{ src: '/intro.mp4', type: 'video/mp4' }],
         controls: true,
         fluid: true,
         responsive: true,
@@ -94,8 +98,10 @@ export default function VideoPlayerWithTTS({ src }: { src: string }) {
         }
       }
       playerRef.current = videojs(videoRef.current, options)
+      console.log('🎬 video.js player initialized')
     }
 
+    // Clean up on unmount
     return () => {
       if (playerRef.current) {
         playerRef.current.dispose()
@@ -104,34 +110,78 @@ export default function VideoPlayerWithTTS({ src }: { src: string }) {
     }
   }, [src])
 
+  // Update subtitles when language changes
+  useEffect(() => {
+    if (videoRef.current && playerRef.current) {
+      // Remove existing tracks
+      const tracks = videoRef.current.getElementsByTagName('track')
+      while (tracks.length > 0) {
+        videoRef.current.removeChild(tracks[0])
+      }
+
+      // Add subtitle track for current language
+      const track = document.createElement('track')
+      track.kind = 'subtitles'
+      track.label = language.code === 'bg' ? 'Български' : 'English'
+      track.srclang = language.code
+      track.src = language.code === 'bg' ? '/subtitles_bg.vtt' : '/subtitles.vtt'
+      track.default = true
+      videoRef.current.appendChild(track)
+    }
+  }, [language, subtitles])
+
   // Handle subtitle reading
   useEffect(() => {
     if (!playerRef.current || subtitles.length === 0 || !isLoaded) return
 
     const player = playerRef.current
-    let lastSubtitleIndex = -1
 
     const handleTimeUpdate = () => {
       const currentTime = player.currentTime()
       const currentSubtitle = subtitles.find((subtitle, index) => {
-        if (currentTime >= subtitle.start && currentTime <= subtitle.end && lastSubtitleIndex !== index) {
-          lastSubtitleIndex = index
+        if (currentTime >= subtitle.start && currentTime <= subtitle.end && lastSubtitleIndex.current !== index) {
+          lastSubtitleIndex.current = index
           return true
         }
         return false
       })
 
       if (currentSubtitle) {
-        cancel() // Cancel any ongoing speech
-        speak(currentSubtitle.text)
+        const now = Date.now()
+        if (now - lastSpokenTimeRef.current >= COOLDOWN_MS) {
+          cancel() // Cancel any ongoing speech
+          speak(currentSubtitle.text, language.speechCode)
+          lastSpokenTimeRef.current = now
+        }
       }
     }
 
+    const handlePlay = () => {
+      lastSubtitleIndex.current = -1
+      lastSpokenTimeRef.current = 0
+    }
+
+    const handlePause = () => {
+      cancel()
+    }
+
+    const handleEnded = () => {
+      cancel()
+      lastSubtitleIndex.current = -1
+      lastSpokenTimeRef.current = 0
+    }
+
     player.on('timeupdate', handleTimeUpdate)
+    player.on('play', handlePlay)
+    player.on('pause', handlePause)
+    player.on('ended', handleEnded)
 
     return () => {
       player.off('timeupdate', handleTimeUpdate)
-      cancel() // Clean up any ongoing speech
+      player.off('play', handlePlay)
+      player.off('pause', handlePause)
+      player.off('ended', handleEnded)
+      cancel()
     }
   }, [subtitles, speak, cancel, isLoaded])
 
@@ -144,7 +194,7 @@ export default function VideoPlayerWithTTS({ src }: { src: string }) {
       />
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <p className="text-white">Loading text-to-speech...</p>
+          <p className="text-white">{t('speechEnabled')}</p>
         </div>
       )}
     </div>

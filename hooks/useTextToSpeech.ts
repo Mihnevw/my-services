@@ -6,7 +6,7 @@ declare global {
   interface Window {
     Speakit: {
       getVoices: () => string[]
-      readText: (text: string, voice?: string) => Promise<void>
+      readText: (text: string, lang?: string, voice?: string) => Promise<void>
       stopSpeaking: () => void
       pauseSpeaking: () => void
       resumeSpeaking: () => void
@@ -17,7 +17,7 @@ declare global {
 }
 
 interface UseTextToSpeechReturn {
-  speak: (text: string) => void
+  speak: (text: string, lang?: string) => void
   cancel: () => void
   pause: () => void
   resume: () => void
@@ -39,7 +39,7 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
   const [isLoaded, setIsLoaded] = useState(false)
 
   // Refs
-  const speechQueueRef = useRef<string[]>([])
+  const speechQueueRef = useRef<Array<{text: string, lang?: string}>>([])
   const isProcessingRef = useRef(false)
   const lastSpokenRef = useRef<string>("")
   const lastSpokenTimeRef = useRef<number>(0)
@@ -65,7 +65,8 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
     if (!isLoaded || isProcessingRef.current || speechQueueRef.current.length === 0) return
 
     isProcessingRef.current = true
-    const text = speechQueueRef.current[0]
+    const queueItem = speechQueueRef.current[0]
+    const { text, lang } = queueItem
 
     // Check if this text was recently spoken
     const now = Date.now()
@@ -77,8 +78,8 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
       return
     }
 
-    console.log('[useTextToSpeech] Processing queue item:', text)
-    Speakit.readText(text)
+    console.log('[useTextToSpeech] Processing queue item:', text, 'language:', lang)
+    Speakit.readText(text, lang)
       .then(() => {
         console.log('[useTextToSpeech] Speech completed successfully')
         lastSpokenRef.current = text
@@ -101,15 +102,15 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
   }, [isLoaded])
 
   // Speak function
-  const speak = useCallback((text: string) => {
-    console.log('[useTextToSpeech] Speaking text:', text)
+  const speak = useCallback((text: string, lang?: string) => {
+    console.log('[useTextToSpeech] Speaking text:', text, 'language:', lang)
     if (!text?.trim()) {
       console.warn('[useTextToSpeech] Empty text provided')
       return
     }
 
     // Check if text is already in queue
-    if (speechQueueRef.current.includes(text)) {
+    if (speechQueueRef.current.some(item => item.text === text)) {
       console.log('[useTextToSpeech] Text already in queue, skipping:', text)
       return
     }
@@ -122,7 +123,7 @@ export function useTextToSpeech(): UseTextToSpeechReturn {
     }
 
     // Add to queue
-    speechQueueRef.current.push(text)
+    speechQueueRef.current.push({ text, lang })
     console.log('[useTextToSpeech] Added to queue, current queue:', speechQueueRef.current)
 
     // If nothing is currently speaking, start processing

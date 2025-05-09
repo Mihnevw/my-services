@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Mail, Phone, MapPin, Send } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { toast } from "sonner"
+import { useLanguage } from "@/contexts/language-context"
 
 // Common email domains
 const COMMON_DOMAINS = [
@@ -65,24 +66,8 @@ const socialLinks = [
   },
 ];
 
-<div className="flex space-x-4">
-  {socialLinks.map(({ name, href, icon }) => (
-    <a
-      key={name}
-      href={href}
-      className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
-      aria-label={`Connect on ${name}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <span className="sr-only">{name}</span>
-      {icon}
-    </a>
-  ))}
-</div>
-
-
 export default function Contact() {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -187,64 +172,79 @@ export default function Contact() {
         <AnimatedSection>
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              Contact
+              {t("contact")}
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              Get in Touch
+              {t("getInTouch")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              Have a project in mind? Let's discuss how I can help you achieve your goals
+              {t("contactDescription")}
             </p>
           </div>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
           <AnimatedSection direction="left">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 h-full">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Contact Information</h3>
-              <div className="space-y-8">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t("contactInformation")}</h3>
+
+              <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mr-4">
-                    <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-blue-600 dark:text-blue-400">
+                    <Mail className="h-6 w-6" />
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white text-lg">Email</h4>
-                    <p className="text-gray-700 dark:text-gray-300 mt-1">stilianmihnev@gmail.com</p>
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">{t("email")}</h4>
+                    <a
+                      href="mailto:stilianmihnev@gmail.com"
+                      className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      stilianmihnev@gmail.com
+                    </a>
                   </div>
                 </div>
+
                 <div className="flex items-start">
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mr-4">
-                    <Phone className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-blue-600 dark:text-blue-400">
+                    <Phone className="h-6 w-6" />
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white text-lg">Phone</h4>
-                    <p className="text-gray-700 dark:text-gray-300 mt-1">+359 89 9 888 888</p>
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">{t("phone")}</h4>
+                    <a
+                      href="tel:+359899888888"
+                      className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                    >
+                      +359 89 9 888 888
+                    </a>
                   </div>
                 </div>
+
                 <div className="flex items-start">
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg mr-4">
-                    <MapPin className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-blue-600 dark:text-blue-400">
+                    <MapPin className="h-6 w-6" />
                   </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white text-lg">Location</h4>
-                    <p className="text-gray-700 dark:text-gray-300 mt-1">Bulgaria, Sliven</p>
+                  <div className="ml-4">
+                    <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">{t("location")}</h4>
+                    <p className="text-gray-700 dark:text-gray-300">Bulgaria, Sliven</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-10">
-                <h4 className="font-medium text-gray-900 dark:text-white text-lg mb-4">Connect with me</h4>
+              <div className="mt-8">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{t("connectWithMe")}</h4>
                 <div className="flex space-x-4">
-                  {socialLinks.map((social) => (
+                  {socialLinks.map(({ name, href, icon }) => (
                     <a
-                      key={social.name}
-                      href={social.href}
+                      key={name}
+                      href={href}
                       className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
-                      aria-label={`Connect on ${social}`}
+                      aria-label={`Connect on ${name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <span className="sr-only">{social.name}</span>
-                      {social.icon}
+                      <span className="sr-only">{name}</span>
+                      {icon}
                     </a>
                   ))}
                 </div>
@@ -252,13 +252,14 @@ export default function Contact() {
             </div>
           </AnimatedSection>
 
-          <AnimatedSection direction="right">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send a Message</h3>
+          <AnimatedSection direction="right" delay={200}>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t("sendMessage")}</h3>
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Name
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t("name")} *
                   </label>
                   <input
                     type="text"
@@ -267,13 +268,13 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="Your name"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                 </div>
+
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t("email")} *
                   </label>
                   <input
                     type="email"
@@ -282,20 +283,17 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className={`form-input w-full px-4 py-3 border ${emailError ? 'border-red-500' : emailWarning ? 'border-yellow-500' : 'border-gray-300 dark:border-gray-600'
-                      } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
-                    placeholder="your.email@example.com"
+                    className={`w-full px-4 py-2 border ${
+                      emailError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                    } rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white`}
                   />
-                  {emailError && (
-                    <p className="mt-1 text-sm text-red-500">{emailError}</p>
-                  )}
-                  {emailWarning && (
-                    <p className="mt-1 text-sm text-yellow-500">{emailWarning}</p>
-                  )}
+                  {emailError && <p className="mt-1 text-sm text-red-500">{emailError}</p>}
+                  {emailWarning && <p className="mt-1 text-sm text-yellow-500">{emailWarning}</p>}
                 </div>
+
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Subject
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t("subject")} *
                   </label>
                   <input
                     type="text"
@@ -304,45 +302,51 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="How can I help you?"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                 </div>
+
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Message
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {t("message")} *
                   </label>
                   <textarea
                     id="message"
                     name="message"
+                    rows={5}
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    rows={5}
-                    className="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                    placeholder="Your message here..."
+                    placeholder={t("yourMessage")}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   ></textarea>
                 </div>
+
                 <button
                   type="submit"
-                  disabled={isSubmitting || !!emailError}
-                  className={`btn-primary inline-flex items-center justify-center text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all duration-300 w-full ${(isSubmitting || !!emailError) ? 'opacity-75 cursor-not-allowed' : ''
-                    }`}
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-1 text-white py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 flex justify-center items-center disabled:opacity-70 disabled:transform-none"
                 >
                   {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Sending...
-                    </>
+                    <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
                   ) : (
-                    <>
-                      <Send className="mr-2 h-5 w-5" />
-                      Send Message
-                    </>
+                    <Send className="h-5 w-5 mr-2" />
                   )}
+                  {isSubmitting ? "Sending..." : t("sendMessageBtn")}
                 </button>
               </form>
             </div>

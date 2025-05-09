@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import { Play, Pause, Volume2, VolumeX, Mic, MicOff } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useThemeColor } from "@/contexts/theme-color-context"
+import { useLanguage } from "@/contexts/language-context"
 import Image from "next/image"
 import Speakit from "@/lib/speakit"
 
@@ -24,41 +25,66 @@ export default function IntroAnimation() {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(-1)
   const videoRef = useRef<HTMLDivElement>(null)
   const { currentColor } = useThemeColor()
+  const { language, t } = useLanguage()
   const lastSpokenTimeRef = useRef<number>(0)
   const COOLDOWN_MS = 100 // Reduced cooldown to ensure smoother transitions
 
   const totalDuration = 30 // seconds
 
-  // Initialize Speakit
+  // Initialize Speakit and preload voices
   useEffect(() => {
     if (typeof window !== "undefined") {
-      Speakit.getVoices().catch(error => {
-        console.error("Failed to initialize Speakit:", error)
-      })
+      Speakit.getVoices()
+        .then(() => {
+          console.log("Speakit initialized successfully")
+          
+          // Pre-select the appropriate voice for the current language
+          if (language && language.speechCode) {
+            console.log(`Pre-setting language to: ${language.speechCode}`)
+            Speakit.setLanguage(language.speechCode)
+          }
+        })
+        .catch(error => {
+          console.error("Failed to initialize Speakit:", error)
+        })
     }
-  }, [])
+  }, [language]) // Re-run when language changes
 
-  // Load and parse VTT file
+  // Load and parse VTT file based on current language
   useEffect(() => {
     const fetchSubtitles = async () => {
       try {
-        const response = await fetch("/subtitles.vtt")
+        const subtitleFile = language.code === 'bg' ? "/subtitles_bg.vtt" : "/subtitles.vtt"
+        console.log(`Loading subtitle file: ${subtitleFile} for language: ${language.code}`)
+        
+        const response = await fetch(subtitleFile)
         const text = await response.text()
         const parsedSubtitles = parseVTT(text)
+        console.log(`Loaded ${parsedSubtitles.length} subtitles`)
         setSubtitles(parsedSubtitles)
       } catch (error) {
         console.error("Failed to load subtitles:", error)
         // Fallback to hardcoded subtitles if VTT file can't be loaded
-        setSubtitles([
-          { start: 0, end: 10, text: "I create beautiful, functional websites that help businesses grow." },
-          { start: 10, end: 20, text: "From concept to launch, I handle every aspect of your digital presence." },
-          { start: 20, end: 30, text: "Let's work together to bring your vision to life and reach your audience." },
-        ])
+        if (language.code === 'bg') {
+          console.log("Using Bulgarian fallback subtitles")
+          setSubtitles([
+            { start: 0, end: 10, text: "Създавам красиви, функционални уебсайтове, които помагат на бизнеса да расте." },
+            { start: 10, end: 20, text: "От концепцията до стартирането, се занимавам с всеки аспект на вашето дигитално присъствие." },
+            { start: 20, end: 30, text: "Нека работим заедно, за да осъществим вашата визия и да достигнем до вашата аудитория." },
+          ])
+        } else {
+          console.log("Using English fallback subtitles")
+          setSubtitles([
+            { start: 0, end: 10, text: "I create beautiful, functional websites that help businesses grow." },
+            { start: 10, end: 20, text: "From concept to launch, I handle every aspect of your digital presence." },
+            { start: 20, end: 30, text: "Let's work together to bring your vision to life and reach your audience." },
+          ])
+        }
       }
     }
 
     fetchSubtitles()
-  }, [])
+  }, [language])
 
   // Animation and subtitle display logic
   useEffect(() => {
@@ -90,9 +116,12 @@ export default function IntroAnimation() {
         if (isSpeechEnabled) {
           const now = Date.now()
           if (now - lastSpokenTimeRef.current >= COOLDOWN_MS) {
-            Speakit.readText(subtitles[subtitleIndex].text).catch(error => {
-              console.error("Failed to speak text:", error)
-            })
+            console.log(`Speaking subtitle in ${language.speechCode}: "${subtitles[subtitleIndex].text}"`)
+            Speakit.readText(subtitles[subtitleIndex].text, language.speechCode)
+              .then(() => console.log("Speech completed successfully"))
+              .catch(error => {
+                console.error("Failed to speak text:", error)
+              })
             lastSpokenTimeRef.current = now
           }
         }
@@ -121,7 +150,7 @@ export default function IntroAnimation() {
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [isPlaying, subtitles, isSpeechEnabled, totalDuration])
+  }, [isPlaying, subtitles, isSpeechEnabled, totalDuration, language])
 
   const togglePlay = () => {
     if (progress >= 100) {
@@ -134,9 +163,12 @@ export default function IntroAnimation() {
 
     if (!isPlaying && isSpeechEnabled && currentSubtitleIndex !== -1) {
       // If we're starting playback and speech is enabled, speak the current subtitle
-      Speakit.readText(subtitles[currentSubtitleIndex].text).catch(error => {
-        console.error("Failed to speak text:", error)
-      })
+      console.log(`Speaking current subtitle in ${language.speechCode}: "${subtitles[currentSubtitleIndex].text}"`)
+      Speakit.readText(subtitles[currentSubtitleIndex].text, language.speechCode)
+        .then(() => console.log("Speech completed successfully"))
+        .catch(error => {
+          console.error("Failed to speak text:", error)
+        })
     } else if (isPlaying) {
       // If we're pausing, cancel any ongoing speech
       Speakit.stopSpeaking()
@@ -155,12 +187,24 @@ export default function IntroAnimation() {
       Speakit.stopSpeaking()
     } else if (!isSpeechEnabled && isPlaying && currentSubtitleIndex !== -1) {
       // Start speaking current subtitle when enabling during playback
-      Speakit.readText(subtitles[currentSubtitleIndex].text).catch(error => {
-        console.error("Failed to speak text:", error)
-      })
+      console.log(`Enabling speech and speaking in ${language.speechCode}: "${subtitles[currentSubtitleIndex].text}"`)
+      Speakit.readText(subtitles[currentSubtitleIndex].text, language.speechCode)
+        .then(() => console.log("Speech completed successfully"))
+        .catch(error => {
+          console.error("Failed to speak text:", error)
+        })
     }
 
     setIsSpeechEnabled(!isSpeechEnabled)
+  }
+
+  // Test function to speak directly in Bulgarian - can be called from UI if needed
+  const testSpeakBulgarian = () => {
+    const testText = "Това е тест на българския глас."
+    console.log("Testing Bulgarian speech:", testText)
+    Speakit.readText(testText, "bg-BG")
+      .then(() => console.log("Bulgarian test speech completed"))
+      .catch(error => console.error("Bulgarian test speech failed:", error))
   }
 
   // Parse VTT file content
@@ -220,10 +264,10 @@ export default function IntroAnimation() {
         <AnimatedSection>
           <div className="text-center mb-10">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              Introduction
+              {t('introduction')}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              What I Do & How I Can Help
+              {t('whatIDo')}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
           </div>
@@ -238,7 +282,7 @@ export default function IntroAnimation() {
                 <div className="absolute inset-0 z-10">
                   <div className="relative w-full h-full">
                     <Image
-                      src="/placeholder.svg?height=720&width=1280"
+                      src="/background.avif"
                       alt="Web development workspace"
                       fill
                       className="object-cover"
@@ -259,7 +303,7 @@ export default function IntroAnimation() {
                     {/* Title overlay */}
                     <div className="absolute bottom-8 left-0 right-0 text-center">
                       <h3 className="text-white text-2xl md:text-3xl font-bold px-4">
-                        Discover How I Can Transform Your Online Presence
+                        {t('discoverTitle')}
                       </h3>
                     </div>
                   </div>
@@ -334,9 +378,8 @@ export default function IntroAnimation() {
 
                       <button
                         onClick={toggleSpeech}
-                        className={`${
-                          isSpeechEnabled ? "bg-blue-600/70" : "bg-white/20"
-                        } hover:bg-white/30 text-white rounded-full p-2 transition-colors`}
+                        className={`${isSpeechEnabled ? "bg-blue-600/70" : "bg-white/20"
+                          } hover:bg-white/30 text-white rounded-full p-2 transition-colors`}
                         aria-label={isSpeechEnabled ? "Disable speech" : "Enable speech"}
                       >
                         {isSpeechEnabled ? <Mic size={20} /> : <MicOff size={20} />}
@@ -353,7 +396,7 @@ export default function IntroAnimation() {
         {isSpeechEnabled && (
           <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center">
             <Mic className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
-            Text-to-speech is enabled. Subtitles will be spoken aloud.
+            {t('speechEnabled')} ({language.name})
           </div>
         )}
       </div>

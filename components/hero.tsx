@@ -1,8 +1,13 @@
+"use client"
+
 import Image from "next/image"
 import AnimatedSection from "./animated-section"
 import { ChevronDown } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Hero() {
+  const { t } = useLanguage()
+  
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background with gradient overlay */}
@@ -36,13 +41,13 @@ export default function Hero() {
       <div className="container mx-auto px-4 md:px-6 z-10 text-center relative">
         <AnimatedSection direction="down" delay={300}>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight text-shadow">
-            <span className="text-glow">Welcome</span> to the Future of Your Business
+            <span className="text-glow">{t("welcome")}</span> {t("welcomeToPortfolio")}
           </h1>
         </AnimatedSection>
 
         <AnimatedSection delay={600}>
           <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-8">
-            I create beautiful, functional websites that help businesses grow and stand out in the digital landscape
+            {t("heroDescription")}
           </p>
         </AnimatedSection>
 
@@ -52,13 +57,13 @@ export default function Hero() {
               href="contact"
               className="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
             >
-              Get in Touch
+              {t("getInTouch")}
             </a>
             <a
               href="/projects"
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40 text-lg"
             >
-              View My Work
+              {t("viewMyWork")}
             </a>
           </div>
         </AnimatedSection>

@@ -4,17 +4,19 @@ import AnimatedSection from "./animated-section"
 import Link from "next/link"
 import { CheckCircle } from "lucide-react"
 import { useThemeColor } from "@/contexts/theme-color-context"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function ServicesPreview() {
   const { currentColor } = useThemeColor()
+  const { t } = useLanguage()
 
   // Using the same services data structure as the main Services component
   // But only showing the first 2 services
   const previewServices = [
     {
-      title: "Web Design",
+      title: t("webDesign"),
       price: "$1,200",
-      description: "Custom website design focused on user experience and brand identity.",
+      description: t("webDesignDesc"),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -32,12 +34,12 @@ export default function ServicesPreview() {
           <line x1="15" y1="9" x2="15.01" y2="9" />
         </svg>
       ),
-      features: ["Responsive design for all devices", "User experience optimization", "Brand integration"],
+      features: t("webDesignFeatures"),
     },
     {
-      title: "Web Development",
+      title: t("webDev"),
       price: "$2,500",
-      description: "Full-stack development of websites and web applications.",
+      description: t("webDevDesc"),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,11 +55,7 @@ export default function ServicesPreview() {
           <polyline points="8 6 2 12 8 18" />
         </svg>
       ),
-      features: [
-        "Custom coding with modern technologies",
-        "Content management system integration",
-        "Performance optimization",
-      ],
+      features: t("webDevFeatures"),
     }
   ]
 
@@ -73,14 +71,14 @@ export default function ServicesPreview() {
         <AnimatedSection>
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              My Services
+              {t("myServices")}
             </p>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              What I Offer
+              {t("whatIOffer")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              Professional services to help you establish a strong online presence
+              {t("servicesDescription")}
             </p>
           </div>
         </AnimatedSection>
@@ -94,7 +92,7 @@ export default function ServicesPreview() {
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">{service.price}</p>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">{service.description}</p>
                 <ul className="space-y-3 mt-auto">
-                  {service.features.map((feature, idx) => (
+                  {Array.isArray(service.features) && service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-700 dark:text-gray-300">{feature}</span>
@@ -115,7 +113,7 @@ export default function ServicesPreview() {
                 background: `linear-gradient(135deg, ${currentColor.secondary} 0%, ${currentColor.primary} 100%)`,
               }}
             >
-              See All Services
+              {t("seeAllServices")}
             </Link>
           </div>
         </AnimatedSection>

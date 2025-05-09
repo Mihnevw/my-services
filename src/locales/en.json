@@ -1,0 +1,15 @@
+{
+    "welcome": "Welcome to the app!",
+    "about": "This is a multilingual application.",
+    "navbar": {
+        "Home": "Home",
+        "About": "About",
+        "Services": "Services",
+        "Projects": "Projects",
+        "Pricing": "Pricing",
+        "Testimonials": "Testimonials",
+        "Blog": "Blog",
+        "Contact": "Contact"
+      }
+      
+}

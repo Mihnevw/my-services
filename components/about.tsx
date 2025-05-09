@@ -1,27 +1,32 @@
+"use client"
+
 import AnimatedSection from "./animated-section"
 import { Code, Palette, Zap, Users } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function About() {
+  const { t } = useLanguage()
+  
   const skills = [
     {
       icon: <Code className="h-8 w-8 text-blue-600 dark:text-blue-400" />,
-      title: "Web Development",
-      description: "Expert in modern frameworks and responsive design principles",
+      title: t("webDevelopment"),
+      description: t("webDevelopmentDesc"),
     },
     {
       icon: <Palette className="h-8 w-8 text-blue-600 dark:text-blue-400" />,
-      title: "UI/UX Design",
-      description: "Creating intuitive and engaging user experiences",
+      title: t("uiUxDesign"),
+      description: t("uiUxDesignDesc"),
     },
     {
       icon: <Zap className="h-8 w-8 text-blue-600 dark:text-blue-400" />,
-      title: "Performance",
-      description: "Optimizing for speed, accessibility, and search engines",
+      title: t("performance"),
+      description: t("performanceDesc"),
     },
     {
       icon: <Users className="h-8 w-8 text-blue-600 dark:text-blue-400" />,
-      title: "Collaboration",
-      description: "Working closely with clients to achieve their goals",
+      title: t("collaboration"),
+      description: t("collaborationDesc"),
     },
   ]
 
@@ -31,10 +36,10 @@ export default function About() {
         <AnimatedSection>
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              About Me
+              {t("aboutMe")}
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              Passionate Web Developer
+              {t("passionateWebDeveloper")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full"></div>
           </div>
@@ -48,14 +53,10 @@ export default function About() {
               <div className="relative bg-white dark:bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700">
                 <div className="max-w-3xl">
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                    Hello! I'm a passionate web developer with over 2 years of experience creating beautiful, functional
-                    websites and applications. I specialize in modern web technologies and focus on delivering clean,
-                    user-friendly designs that help businesses achieve their goals.
+                    {t("aboutDescription1")}
                   </p>
                   <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    My approach combines technical expertise with creative problem-solving to build digital experiences
-                    that stand out. I believe in continuous learning and staying up-to-date with the latest industry
-                    trends to provide the best solutions for my clients.
+                    {t("aboutDescription2")}
                   </p>
                   <div className="mt-8 flex flex-wrap gap-3">
                     {["JavaScript", "React", "Next.js", "TypeScript", "Tailwind CSS", "Node.js", "UI/UX Design", "Supabase", "Git"].map(

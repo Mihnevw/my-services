@@ -1,8 +1,13 @@
+"use client"
+
 import Image from "next/image"
 import AnimatedSection from "./animated-section"
 import { ExternalLink, Github } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Projects() {
+  const { t } = useLanguage()
+  
   const projects = [
     {
       title: "AF_Barbershop",
@@ -45,14 +50,14 @@ export default function Projects() {
         <AnimatedSection>
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              My Work
+              {t("myWork")}
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              Recent Projects
+              {t("recentProjects")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              Take a look at some of my recent work and the problems I've solved
+              {t("projectsDescription")}
             </p>
           </div>
         </AnimatedSection>
@@ -98,13 +103,13 @@ export default function Projects() {
                       href={project.liveUrl}
                       className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 flex items-center"
                     >
-                      Live Preview <ExternalLink className="ml-1 h-3 w-3" />
+                      {t("livePreview")} <ExternalLink className="ml-1 h-3 w-3" />
                     </a>
                     <a
                       href={project.githubUrl}
                       className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 flex items-center"
                     >
-                      Source Code <Github className="ml-1 h-3 w-3" />
+                      {t("sourceCode")} <Github className="ml-1 h-3 w-3" />
                     </a>
                   </div>
                 </div>

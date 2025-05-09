@@ -1,9 +1,42 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { Facebook, Linkedin, Github } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Footer() {
+  const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
+
+  const navItems = [
+    { name: t("home"), href: "/" },
+    { name: t("about"), href: "/about" },
+    { name: t("services"), href: "/services" },
+    { name: t("projects"), href: "/projects" },
+    { name: t("pricing"), href: "/pricing" },
+    { name: t("testimonials"), href: "/testimonials" },
+    { name: t("blog"), href: "/blog" },
+    { name: t("contact"), href: "/contact" },
+  ]
+
+  const serviceItems = [
+    { name: t("webDesign"), href: "/services" },
+    { name: t("webDev"), href: "/services" },
+    { name: t("seoOptimization"), href: "/services" },
+    { name: t("maintenance"), href: "/services" },
+    { name: "E-commerce", href: "/services" },
+    { name: "Branding", href: "/services" },
+  ]
+
+  const resourceItems = [
+    { name: t("blog"), href: "/" },
+    { name: "Case Studies", href: "/" },
+    { name: "Portfolio", href: "/" },
+    { name: t("testimonials"), href: "/" },
+    { name: "FAQ", href: "/" },
+    { name: "Support", href: "/" },
+  ]
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-16">
@@ -20,7 +53,7 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-3 text-gray-400 max-w-md">
-              Creating beautiful, functional websites that help businesses grow and succeed online.
+              {t("heroDescription")}
             </p>
           </div>
 
@@ -51,70 +84,68 @@ export default function Footer() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Navigation</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">{t("home")}</h3>
             <ul className="space-y-2">
-              {["Home", "About", "Services", "Projects", "Pricing", "Testimonials", "Blog", "Contact"].map((item) => (
-                <li key={item}>
-                  <Link href={`/${item.toLowerCase()}`} className="text-gray-400 hover:text-blue-400 transition-colors">
-                    {item}
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-gray-400 hover:text-blue-400 transition-colors">
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Services</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">{t("services")}</h3>
             <ul className="space-y-2">
-              {["Web Design", "Web Development", "SEO Optimization", "Maintenance", "E-commerce", "Branding"].map(
-                (item) => (
-                  <li key={item}>
-                    <Link href="/services" className="text-gray-400 hover:text-blue-400 transition-colors">
-                      {item}
-                    </Link>
-                  </li>
-                ),
-              )}
+              {serviceItems.map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-gray-400 hover:text-blue-400 transition-colors">
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Resources</h3>
             <ul className="space-y-2">
-              {["Blog", "Case Studies", "Portfolio", "Testimonials", "FAQ", "Support"].map((item) => (
-                <li key={item}>
-                  <Link href="/" className="text-gray-400 hover:text-blue-400 transition-colors">
-                    {item}
+              {resourceItems.map((item) => (
+                <li key={item.name}>
+                  <Link href={item.href} className="text-gray-400 hover:text-blue-400 transition-colors">
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Contact</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">{t("contact")}</h3>
             <ul className="space-y-2">
               <li className="text-gray-400">
-                <span className="block">Email: stilianmihnev@gmail.com</span>
+                <span className="block">{t("email")}: stilianmihnev@gmail.com</span>
               </li>
               <li className="text-gray-400">
-                <span className="block">Phone: +359 89 9 888 888</span>
+                <span className="block">{t("phone")}: +359 89 9 888 888</span>
               </li>
               <li className="text-gray-400">
-                <span className="block">Address: Bulgaria, Sliven</span>
+                <span className="block">{t("location")}: Bulgaria, Sliven</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© {currentYear} Mihnev. All rights reserved.</p>
+          <p className="text-gray-400">© {currentYear} Mihnev. {t("allRightsReserved")}</p>
           <div className="mt-4 md:mt-0 flex space-x-6">
             <Link href="/legal/privacy-policy" className="text-gray-400 hover:text-white transition-colors">
-              Privacy Policy
+              {t("privacyPolicy")}
             </Link>
             <Link href="/legal/terms-of-service" className="text-gray-400 hover:text-white transition-colors">
-              Terms of Service
+              {t("termsOfService")}
             </Link>
             <Link href="/legal/cookie-policy" className="text-gray-400 hover:text-white transition-colors">
-              Cookie Policy
+              {t("cookiePolicy")}
             </Link>
           </div>
         </div>

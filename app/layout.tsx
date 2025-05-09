@@ -9,6 +9,8 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "@/components/ui/toaster";
 import { ReactNode } from "react";
 import ClientProviders from "../components/ClientProviders";
+import { LanguageProvider } from "@/contexts/language-context";
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -34,14 +36,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <ThemeColorProvider>
-            <AuthProvider>
-              <ClientProviders>
+          <LanguageProvider>
+            <ThemeColorProvider>
+              <AuthProvider>
+                <ClientProviders>
                 {children}
                 <Toaster />
               </ClientProviders>
             </AuthProvider>
           </ThemeColorProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -9,6 +9,10 @@ import TargetAudience from "@/components/target-audience";
 import IntroAnimation from "@/components/intro-animation";
 import ServicesPreview from "@/components/services-preview";
 import VideoPlayer from "@/components/VideoPlayer";
+import LanguageSpeechTest from "@/components/language-speech-test";
+
+// A small toggle to enable the test component (for development only)
+const SHOW_SPEECH_TEST = true;
 
 export default function Home() {
   return (
@@ -16,8 +20,9 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
       <Hero />
-      <VideoPlayer src="/intro.mp4" />
+      {/* <VideoPlayer src="/intro.mp4" /> */}
       <IntroAnimation />
+      {/* SHOW_SPEECH_TEST && <LanguageSpeechTest /> */}
       <TargetAudience />
       <ServicesPreview />
       <Testimonials />
