@@ -16,7 +16,7 @@ interface Notification {
 const notifications: Notification[] = [
   {
     id: 1,
-    logo: "https://cdn.builtin.com/cdn-cgi/image/f=auto,fit=contain,w=200,h=200,q=100/https://builtinboston.com/sites/www.builtinboston.com/files/2020-09/TheeDigital%20Logo%20No%20Slogan%20-%20Horizontal%20RGB%20Transparent.png",
+    logo: "TheeDigital.png",
     title: "TheeDigital",
     message: "25 Top Web Design Trends 2025.",
     time: "now",
@@ -24,7 +24,7 @@ const notifications: Notification[] = [
   },
   {
     id: 2,
-    logo: "https://upfirms.com/wp-content/uploads/2020/02/Digital-Silk-Logo.png",
+    logo: "DigitalSilk.png",
     title: "Digital Silk",
     message: "How To Increase Website Conversion Rates: Top Strategies From Digital Experts.",
     time: "1m",
@@ -32,7 +32,7 @@ const notifications: Notification[] = [
   },
   {
     id: 3,
-    logo: "https://static.habilelabs.io/horizontal_logo_footer_and_logo_story_7fdebbfd54.svg",
+    logo: "HabileLabs.png",
     title: "Habile Labs",
     message: "A Complete SEO Guide for Web Developers.",
     time: "2m",

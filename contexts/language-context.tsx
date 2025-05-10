@@ -49,8 +49,8 @@ export const translations: { [lang: string]: TranslationDict } = {
     profile: "Profile",
 
     // Hero
-    welcome: "Welcome",
-    welcomeToPortfolio: "Welcome to My Portfolio",
+    welcome: "",
+    welcomeToPortfolio: "Welcome to the Future of your business",
     heroDescription: "I create beautiful, functional websites that help businesses grow and stand out in the digital landscape",
     getInTouch: "Get in Touch",
     viewMyWork: "View My Work",
@@ -250,8 +250,8 @@ export const translations: { [lang: string]: TranslationDict } = {
     profile: "Профил",
 
     // Hero
-    welcome: "Добре дошли",
-    welcomeToPortfolio: "Добре дошли в моето портфолио",
+    welcome: "",
+    welcomeToPortfolio: "Добре дошли в бъдещето на вашия бизнес",
     heroDescription: "Създавам красиви, функционални уебсайтове, които помагат на бизнеса да расте и да се отличава в дигиталната среда",
     getInTouch: "Свържете се",
     viewMyWork: "Вижте моята работа",

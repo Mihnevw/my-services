@@ -33,7 +33,7 @@ export default function LanguageExample() {
 
   // Example of using text-to-speech
   const speakWelcome = () => {
-    speak(t("welcomeToPortfolio"))
+    speak(t("welcomeToPortfolio")) // Replace with: Welcome to the Future of your business
   }
 
   return (
