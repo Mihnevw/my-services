@@ -1,55 +1,40 @@
+"use client"
+
 import { CheckCircle, Code, Palette, Search, Settings } from "lucide-react"
 import AnimatedSection from "./animated-section"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Services() {
+  const { t } = useLanguage();
+  
   const services = [
     {
-      title: "Web Design",
-      price: "$1,200",
-      description: "Custom website design focused on user experience and brand identity.",
+      title: t("webDesign"),
+      price: t("webDesignPrice"),
+      description: t("webDesignDesc"),
       icon: <Palette className="h-10 w-10 text-blue-600 dark:text-blue-400" />,
-      features: [
-        "Responsive design for all devices",
-        "User experience optimization",
-        "Brand integration",
-        "Wireframing and prototyping",
-      ],
+      features: JSON.parse(t("webDesignFeatures")) as string[],
     },
     {
-      title: "Web Development",
-      price: "$2,500",
-      description: "Full-stack development of websites and web applications.",
+      title: t("webDev"),
+      price: t("webDevPrice"),
+      description: t("webDevDesc"),
       icon: <Code className="h-10 w-10 text-blue-600 dark:text-blue-400" />,
-      features: [
-        "Custom coding with modern technologies",
-        "Content management system integration",
-        "E-commerce functionality",
-        "Performance optimization",
-      ],
+      features: JSON.parse(t("webDevFeatures")) as string[],
     },
     {
-      title: "SEO Optimization",
-      price: "$800",
-      description: "Improve your website's visibility in search engines.",
+      title: t("seoOptimization"),
+      price: t("seoPrice"),
+      description: t("seoDesc"),
       icon: <Search className="h-10 w-10 text-blue-600 dark:text-blue-400" />,
-      features: [
-        "Keyword research and analysis",
-        "On-page SEO optimization",
-        "Technical SEO improvements",
-        "Monthly performance reports",
-      ],
+      features: JSON.parse(t("seoFeatures")) as string[],
     },
     {
-      title: "Maintenance",
-      price: "$300/month",
-      description: "Keep your website secure, updated, and running smoothly.",
+      title: t("maintenance"),
+      price: t("maintenancePrice"),
+      description: t("maintenanceDesc"),
       icon: <Settings className="h-10 w-10 text-blue-600 dark:text-blue-400" />,
-      features: [
-        "Regular software updates",
-        "Security monitoring",
-        "Performance optimization",
-        "Content updates and backups",
-      ],
+      features: JSON.parse(t("maintenanceFeatures")) as string[],
     },
   ]
 
@@ -65,14 +50,14 @@ export default function Services() {
         <AnimatedSection>
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              My Services
+              {t("myServices")}
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              What I Offer
+              {t("whatIOffer")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              I offer a range of services to help you establish a strong online presence
+              {t("servicesDescription")}
             </p>
           </div>
         </AnimatedSection>

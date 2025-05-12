@@ -6,43 +6,41 @@ import { useState } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import AnimatedSection from "./animated-section"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Testimonials() {
+  const { t } = useLanguage()
   const testimonials = [
     {
       id: 1,
-      name: "Sarah Johnson",
-      position: "CEO, TechStart Inc.",
+      name: t("testimonialSarah"),
+      position: t("testimonialSarahPosition"),
       image: "/sarah.png",
-      content:
-        "Working with this team was an absolute pleasure. They took our outdated website and transformed it into a modern, user-friendly platform that perfectly represents our brand. The attention to detail and commitment to quality exceeded our expectations.",
+      content: t("testimonialSarahContent"),
       rating: 5,
     },
     {
       id: 2,
-      name: "Michael Chen",
-      position: "Marketing Director, GrowthBox",
+      name: t("testimonialMichael"),
+      position: t("testimonialMichaelPosition"),
       image: "/developer.png",
-      content:
-        "Our e-commerce sales increased by 45% within three months of launching our new website. The intuitive design and seamless checkout process have significantly improved our conversion rates. I highly recommend their services to any business looking to grow online.",
+      content: t("testimonialMichaelContent"),
       rating: 5,
     },
     {
       id: 3,
-      name: "Emma Rodriguez",
-      position: "Founder, Artisan Crafts",
+      name: t("testimonialEmma"),
+      position: t("testimonialEmmaPosition"),
       image: "/emma.png",
-      content:
-        "As a small business owner, I needed a website that would showcase my products without breaking the bank. They delivered a beautiful, functional site that fits my budget and has helped me reach new customers. The ongoing support has been invaluable.",
+      content: t("testimonialEmmaContent"),
       rating: 4,
     },
     {
       id: 4,
-      name: "David Thompson",
-      position: "CTO, InnovateTech",
+      name: t("testimonialDavid"),
+      position: t("testimonialDavidPosition"),
       image: "/david.png",
-      content:
-        "The technical expertise demonstrated throughout our project was impressive. They implemented complex features with ease and ensured our website was fast, secure, and scalable. Their ability to translate technical requirements into practical solutions made all the difference.",
+      content: t("testimonialDavidContent"),
       rating: 5,
     },
   ]
@@ -100,14 +98,14 @@ export default function Testimonials() {
         <AnimatedSection>
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              Testimonials
+              {t("testimonials")}
             </p>
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              Client Feedback
+              {t("clientFeedback")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              Don't just take my word for it - hear what my clients have to say
+              {t("testimonialsDescription")}
             </p>
           </div>
         </AnimatedSection>
@@ -150,6 +148,7 @@ export default function Testimonials() {
                                     ? "fill-yellow-400 text-yellow-400"
                                     : "fill-gray-200 text-gray-200 dark:fill-gray-600 dark:text-gray-600"
                                 }`}
+                                aria-label={t("testimonialRating")}
                               />
                             ))}
                           </div>

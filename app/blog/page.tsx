@@ -1,5 +1,5 @@
 import Navbar from "@/components/navbar"
-import Blog from "@/components/blog"
+import Blog from "@/components/BlogNotification"
 
 export const metadata = {
   title: "Blog - Portfolio Website",

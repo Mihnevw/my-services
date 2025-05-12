@@ -1,55 +1,58 @@
+"use client"
 import { Check } from "lucide-react"
 import AnimatedSection from "./animated-section"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function Pricing() {
+  const { t } = useLanguage();
   const plans = [
     {
-      name: "Basic",
-      price: "$300",
-      description: "Perfect for small businesses just getting started",
+      name: t("planBasicName"),
+      price: t("PlanPriceBasic"),
+      description: t("planBasicDesc"),
       features: [
-        "5-page responsive website",
-        "Basic SEO setup",
-        "Contact form",
-        "Mobile-friendly design",
-        "1 month of support",
+        t("pricingFeatureBasic1"),
+        t("pricingFeatureBasic2"),
+        t("pricingFeatureBasic3"),
+        t("pricingFeatureBasic4"),
+        t("pricingFeatureBasic5"),
       ],
       highlighted: false,
-      ctaText: "Choose Basic",
+      ctaText: t("planBasicCTA"),
     },
     {
-      name: "Standard",
-      price: "$870",
-      description: "Ideal for growing businesses with specific needs",
+      name: t("planStandardName"),
+      price: t("PlanPriceStandard"),
+      description: t("planStandardDesc"),
       features: [
-        "10-page responsive website",
-        "Advanced SEO optimization",
-        "Content management system",
-        "Blog integration",
-        "Social media integration",
-        "E-commerce functionality (up to 20 products)",
-        "3 months of support",
+        t("pricingFeatureStandard1"),
+        t("pricingFeatureStandard2"),
+        t("pricingFeatureStandard3"),
+        t("pricingFeatureStandard4"),
+        t("pricingFeatureStandard5"),
+        t("pricingFeatureStandard6"),
+        t("pricingFeatureStandard7"),
       ],
       highlighted: true,
-      ctaText: "Choose Standard",
+      ctaText: t("planStandardCTA"),
     },
     {
-      name: "Premium",
-      price: "$1200",
-      description: "Comprehensive solution for established businesses",
+      name: t("planPremiumName"),
+      price: t("PlanPricePremium"),
+      description: t("planPremiumDesc"),
       features: [
-        "Unlimited pages",
-        "Custom design & functionality",
-        "Advanced SEO strategy",
-        "Full e-commerce solution",
-        "Custom integrations",
-        "Performance optimization",
-        "Security features",
-        "6 months of priority support",
-        "Monthly performance reports",
+        t("pricingFeaturePremium1"),
+        t("pricingFeaturePremium2"),
+        t("pricingFeaturePremium3"),
+        t("pricingFeaturePremium4"),
+        t("pricingFeaturePremium5"),
+        t("pricingFeaturePremium6"),
+        t("pricingFeaturePremium7"),
+        t("pricingFeaturePremium8"),
+        t("pricingFeaturePremium9"),
       ],
       highlighted: false,
-      ctaText: "Choose Premium",
+      ctaText: t("planPremiumCTA"),
     },
   ]
 
@@ -64,16 +67,10 @@ export default function Pricing() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <AnimatedSection>
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
-              Pricing Plans
-            </p>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">
-              Choose Your Plan
-            </h2>
+            <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">{t("pricingHeader")}</p>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">{t("pricingSubHeader")}</h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
-            <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-              Transparent pricing with no hidden fees. Choose the perfect plan for your needs
-            </p>
+            <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">{t("pricingDescription")}</p>
           </div>
         </AnimatedSection>
 
@@ -88,7 +85,7 @@ export default function Pricing() {
                 }`}
               >
                 {plan.highlighted && (
-                  <div className="bg-gradient-1 text-white text-center py-2 text-sm font-medium">Most Popular</div>
+                  <div className="bg-gradient-1 text-white text-center py-2 text-sm font-medium">{t("pricingMostPopular")}</div>
                 )}
                 <div className="p-8 bg-white dark:bg-gray-700 h-full flex flex-col">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>

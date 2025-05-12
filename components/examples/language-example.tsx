@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useLanguage, LANGUAGES } from "@/contexts/language-context"
-import { speak } from "@/components/language-selector"
+import { speak } from "@/components/LanguageSelector"
 
 /**
  * Example component demonstrating how to use the language context

@@ -11,7 +11,7 @@ export default function Projects() {
   const projects = [
     {
       title: "AF_Barbershop",
-      description: "A modern web application for managing hairdresser salon appointments using Google Calendar integration.",
+      description: t("descriptionProjects1"),
       image: "/af.png",
       tags: ["React", "Node.js", "MongoDB", "Tailwind CSS", "TypeScript"],
       liveUrl: "https://afbarber.netlify.app/",
@@ -19,8 +19,7 @@ export default function Projects() {
     },
     {
       title: "Recircle",
-      description:
-        "A modern web application for exchanging items (clothes, equipment, books, etc.) with a focus on sustainability and zero-waste principles.",
+      description: t("descriptionProjects2"),
       image: "/zero.png",
       tags: ["UI/UX", "React", "Node.js", "MongoDB", "Tailwind CSS", "TypeScript", "Firebase"],
       liveUrl: "https://zero-waste-swap.vercel.app/",
@@ -28,7 +27,7 @@ export default function Projects() {
     },
     {
       title: "DeliDish",
-      description: "DeliDish Is a restaurant web application built with React.js and Bootstrap, providing a modern and responsive look. It includes a dynamic menu that displays delicious food and uses React Router for efficient navigation. Authentication is implemented with Login and Register functionality, and after a successful login, the user remains logged in even with a strict refresh. Navigation changes dynamically depending on the user's status.",
+      description: t("descriptionProjects3"),
       image: "/delidish.png",
       tags: ["React Native", "Firebase", "Redux"],
       liveUrl: "https://foodforge.netlify.app/",
@@ -36,7 +35,7 @@ export default function Projects() {
     },
     {
       title: "Portfolio",
-      description: "This portfolio is not just a website, but an interactive showcase of my skills and projects. All projects are dynamically loaded directly from GitHub, ensuring always up-to-date information. A notification system has been added to the Skills section, which shows the latest news on the specific notification. With an integrated Back-end, the Contact Us section allows clients to easily contact me. The design is modern, convenient and optimized for all devices, and the navigation is intuitive to make the review enjoyable and efficient.",
+      description: t("descriptionProjects4"),
       image: "/portfolio.png",
       tags: ["Next.js", "Tailwind CSS", "Vercel"],
       liveUrl: "https://mihnevw.netlify.app/",
