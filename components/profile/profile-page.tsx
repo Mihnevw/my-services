@@ -10,6 +10,7 @@ import { useThemeColor } from "@/contexts/theme-color-context"
 import { ArrowLeft, User, Shield, Link2, Settings } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 
 type ProfilePageProps = {
   onClose?: () => void
@@ -19,6 +20,7 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
   const [activeTab, setActiveTab] = useState("profile")
   const { currentColor } = useThemeColor()
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   // Use actual user data from Supabase
   const userData = {
@@ -50,6 +52,8 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
             href="/"
             className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            {t("backToHome")}
           </Link>
         </div>
 
@@ -67,7 +71,7 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
                   }`}
                 >
                   <User size={18} className="mr-3" />
-                  Profile Information
+                  {t("profileInformation")}
                 </button>
                 <button
                   onClick={() => setActiveTab("security")}
@@ -78,7 +82,7 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
                   }`}
                 >
                   <Shield size={18} className="mr-3" />
-                  Security
+                  {t("security")}
                 </button>
                 <button
                   onClick={() => setActiveTab("social")}
@@ -89,7 +93,7 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
                   }`}
                 >
                   <Link2 size={18} className="mr-3" />
-                  Social Links
+                  {t("socialLinks")}
                 </button>
                 <button
                   onClick={() => setActiveTab("preferences")}
@@ -100,7 +104,7 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
                   }`}
                 >
                   <Settings size={18} className="mr-3" />
-                  Preferences
+                  {t("preferences")}
                 </button>
               </div>
             </div>

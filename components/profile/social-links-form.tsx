@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 
 type SocialLinks = {
   twitter: string
@@ -32,6 +33,7 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
   const { currentColor } = useThemeColor()
   const router = useRouter()
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -114,9 +116,9 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Social Media Profiles</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("socialMediaProfiles")}</h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Connect your social media accounts to your profile
+          {t("connectSocialAccounts")}
         </p>
       </div>
 
@@ -124,13 +126,13 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center mb-6">
             <Link2 className="h-6 w-6 text-blue-600 dark:text-blue-400 mr-3" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Social Media Links</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t("socialMediaLinks")}</h3>
           </div>
 
           <div className="grid grid-cols-1 gap-6">
             <div>
               <label htmlFor="twitter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Twitter
+                {t("twitter")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -156,7 +158,7 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
 
             <div>
               <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                LinkedIn
+                {t("linkedin")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -182,7 +184,7 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
 
             <div>
               <label htmlFor="github" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                GitHub
+                {t("github")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -208,7 +210,7 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
 
             <div>
               <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Instagram
+                {t("instagram")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -252,10 +254,10 @@ export default function SocialLinksForm({ socialLinks }: SocialLinksFormProps) {
             {isSaving ? (
               <>
                 <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
-              "Save Changes"
+              t("saveChanges")
             )}
           </button>
         </div>

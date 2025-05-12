@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
 
 type Preferences = {
   emailNotifications: boolean
@@ -33,6 +34,7 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
   const { user } = useAuth()
   const { currentColor } = useThemeColor()
   const { theme, setTheme } = useTheme()
+  const { t } = useLanguage()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target
@@ -85,9 +87,9 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Account Preferences</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("accountPreferences")}</h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Customize your account settings and notification preferences
+          {t("customizeSettings")}
         </p>
       </div>
 
@@ -97,7 +99,7 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center mb-6">
               <Bell className="h-6 w-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Notification Settings</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t("notificationSettings")}</h3>
             </div>
 
             <div className="space-y-6">
@@ -106,10 +108,10 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
                   <Mail className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                   <div>
                     <label htmlFor="emailNotifications" className="font-medium text-gray-700 dark:text-gray-300">
-                      Email Notifications
+                      {t("emailNotifications")}
                     </label>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive notifications about your account activity
+                      {t("receiveAccountNotifications")}
                     </p>
                   </div>
                 </div>
@@ -134,10 +136,10 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
                   <Megaphone className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                   <div>
                     <label htmlFor="marketingEmails" className="font-medium text-gray-700 dark:text-gray-300">
-                      Marketing Emails
+                      {t("marketingEmails")}
                     </label>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive emails about new features and offers
+                      {t("receiveFeatureUpdates")}
                     </p>
                   </div>
                 </div>
@@ -162,10 +164,10 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
                   <GitBranch className="h-5 w-5 text-gray-400 mr-3 mt-0.5" />
                   <div>
                     <label htmlFor="projectUpdates" className="font-medium text-gray-700 dark:text-gray-300">
-                      Project Updates
+                      {t("projectUpdates")}
                     </label>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Receive updates about your project status
+                      {t("receiveProjectStatus")}
                     </p>
                   </div>
                 </div>
@@ -191,23 +193,22 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center mb-6">
               <Moon className="h-6 w-6 text-blue-600 dark:text-blue-400 mr-3" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">Appearance</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t("appearance")}</h3>
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-700 dark:text-gray-300">Theme</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Choose your preferred theme</p>
+                <p className="font-medium text-gray-700 dark:text-gray-300">{t("theme")}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t("chooseTheme")}</p>
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={() => handleThemeChange("light")}
-                  className={`p-2 rounded-lg ${
-                    theme === "light"
+                  className={`p-2 rounded-lg ${theme === "light"
                       ? "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400"
                       : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
-                  }`}
+                    }`}
                   aria-label="Light mode"
                 >
                   <Sun className="h-5 w-5" />
@@ -215,11 +216,10 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
                 <button
                   type="button"
                   onClick={() => handleThemeChange("dark")}
-                  className={`p-2 rounded-lg ${
-                    theme === "dark"
+                  className={`p-2 rounded-lg ${theme === "dark"
                       ? "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400"
                       : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
-                  }`}
+                    }`}
                   aria-label="Dark mode"
                 >
                   <Moon className="h-5 w-5" />
@@ -247,10 +247,10 @@ export default function PreferencesForm({ preferences }: PreferencesFormProps) {
             {isSaving ? (
               <>
                 <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                Saving...
+                {t("saving")}
               </>
             ) : (
-              "Save Preferences"
+              t("savePreferences")
             )}
           </button>
         </div>

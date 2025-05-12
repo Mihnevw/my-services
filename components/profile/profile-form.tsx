@@ -8,6 +8,7 @@ import { useThemeColor } from "@/contexts/theme-color-context"
 import { useAuth } from "@/contexts/auth-context"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
+import { useLanguage } from "@/contexts/language-context"
 
 type UserData = {
     name: string
@@ -38,6 +39,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
     const [successMessage, setSuccessMessage] = useState("")
     const { currentColor } = useThemeColor()
     const { user } = useAuth()
+    const { t } = useLanguage()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -168,7 +170,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                 throw new Error("Failed to update display name")
             }
 
-            setSuccessMessage("Profile updated successfully!")
+            setSuccessMessage(t("profileUpdated"))
             // Redirect to home page after a short delay to show the success message
             setTimeout(() => {
                 router.push('/')
@@ -177,7 +179,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
             console.error("Failed to update profile:", error)
             setErrors((prev) => ({ 
                 ...prev, 
-                form: error instanceof Error ? error.message : "Failed to update profile. Please try again." 
+                form: error instanceof Error ? error.message : t("failedToUpdateProfile") 
             }))
         } finally {
             setIsSaving(false)
@@ -187,9 +189,9 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
     return (
         <div className="space-y-8">
             <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Profile Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("profileInformation")}</h2>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Update your personal information and how others see you on the platform
+                    {t("updatePersonalInfo")}
                 </p>
             </div>
 
@@ -210,7 +212,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                             className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full cursor-pointer shadow-md transition-colors"
                         >
                             <Camera size={16} />
-                            <span className="sr-only">Upload profile picture</span>
+                            <span className="sr-only">{t("uploadProfilePicture")}</span>
                         </label>
                         <input
                             type="file"
@@ -222,9 +224,9 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                         />
                     </div>
                     <div>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">Profile Picture</h3>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t("profilePicture")}</h3>
                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            JPG, GIF or PNG. Max size of 5MB.
+                            {t("imageRequirements")}
                         </p>
                         {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
                     </div>
@@ -234,7 +236,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div className="relative">
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Full Name
+                            {t("fullName")}
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -255,7 +257,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
 
                     <div className="relative">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Email Address
+                            {t("emailAddress")}
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -276,7 +278,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
 
                     <div className="relative">
                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Phone Number <span className="text-gray-500 dark:text-gray-400">(Optional)</span>
+                            {t("phoneNumber")} <span className="text-gray-500 dark:text-gray-400">{t("optional")}</span>
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -295,7 +297,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
 
                     <div className="relative">
                         <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Location <span className="text-gray-500 dark:text-gray-400">(Optional)</span>
+                            {t("location")} <span className="text-gray-500 dark:text-gray-400">{t("optional")}</span>
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -308,7 +310,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                                 value={formData.location}
                                 onChange={handleChange}
                                 className="form-input w-full pl-10 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                placeholder="City, Country"
+                                placeholder={t("cityCountry")}
                             />
                         </div>
                     </div>
@@ -316,7 +318,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
 
                 <div>
                     <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Bio <span className="text-gray-500 dark:text-gray-400">(Optional)</span>
+                        {t("bio")} <span className="text-gray-500 dark:text-gray-400">{t("optional")}</span>
                     </label>
                     <textarea
                         id="bio"
@@ -325,7 +327,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                         value={formData.bio}
                         onChange={handleChange}
                         className="form-input w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                        placeholder="Tell us a little about yourself"
+                        placeholder={t("tellUsAboutYourself")}
                     ></textarea>
                 </div>
 
@@ -356,7 +358,7 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                                 Saving...
                             </>
                         ) : (
-                            "Save Changes"
+                            t("saveChanges")
                         )}
                     </button>
                 </div>

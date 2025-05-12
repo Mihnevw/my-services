@@ -7,6 +7,7 @@ import { useThemeColor } from "@/contexts/theme-color-context"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useLanguage } from "@/contexts/language-context" 
 
 type SecurityFormProps = {
   email: string
@@ -26,6 +27,7 @@ export default function SecurityForm({ email }: SecurityFormProps) {
   const [successMessage, setSuccessMessage] = useState("")
   const { currentColor } = useThemeColor()
   const router = useRouter()
+  const { t } = useLanguage()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -120,9 +122,9 @@ export default function SecurityForm({ email }: SecurityFormProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Security Settings</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("securitySettings")}</h2>
         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Update your password and manage your account security
+          {t("updatePassword")}
         </p>
       </div>
 
@@ -131,7 +133,7 @@ export default function SecurityForm({ email }: SecurityFormProps) {
           <div className="space-y-6">
             <div>
               <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Current Password
+                {t("currentPassword")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -165,7 +167,7 @@ export default function SecurityForm({ email }: SecurityFormProps) {
 
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                New Password
+                {t("newPassword")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -197,14 +199,14 @@ export default function SecurityForm({ email }: SecurityFormProps) {
               {errors.newPassword && <p className="mt-1 text-sm text-red-500">{errors.newPassword}</p>}
               {!errors.newPassword && (
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Password must be at least 8 characters long and include uppercase, lowercase, and numbers
+                  {t("passwordRequirements")}
                 </p>
               )}
             </div>
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Confirm New Password
+                {t("confirmNewPassword")}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -262,12 +264,12 @@ export default function SecurityForm({ email }: SecurityFormProps) {
             {isSaving ? (
               <>
                 <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                Updating...
+                {t("updating")}
               </>
             ) : (
               <>
                 <Shield className="mr-2 h-4 w-4" />
-                Update Password
+                {t("updatePassword")}
               </>
             )}
           </button>
@@ -275,19 +277,19 @@ export default function SecurityForm({ email }: SecurityFormProps) {
       </form>
 
       <div className="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Security Recommendations</h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">{t("securityRecommendations")}</h3>
 
         <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
           <div className="flex items-start">
             <Shield className="h-6 w-6 text-blue-600 dark:text-blue-400 mt-0.5 mr-4" />
             <div>
-              <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300">Keep your account secure</h4>
+              <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300">{t("keepAccountSecure")}</h4>
               <ul className="mt-3 text-sm text-blue-700 dark:text-blue-400 space-y-2">
-                <li>• Use a strong, unique password that you don't use elsewhere</li>
-                <li>• Enable two-factor authentication for additional security</li>
-                <li>• Regularly check your account for suspicious activity</li>
-                <li>• Never share your password with anyone</li>
-                <li>• Use a password manager to generate and store secure passwords</li>
+                <li>• {t("securityTips")}</li>
+                <li>• {t("securityTips")}</li>
+                <li>• {t("securityTips")}</li>
+                <li>• {t("securityTips")}</li>
+                <li>• {t("securityTips")}</li>
               </ul>
             </div>
           </div>
