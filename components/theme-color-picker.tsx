@@ -38,8 +38,8 @@ export default function ThemeColorPicker() {
         onClick={() => setIsOpen(!isOpen)}
         className={`flex items-center gap-2 font-medium py-2 px-3 rounded-full transition-all duration-300 border
           ${isScrolled
-            ? "bg-white/80 border-white/80 text-gray-400 dark:bg-gray-900/80 dark:text-white"
-            : "bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/50 hover:border-white/40"
+            ? "bg-transparent border-transparent text-gray-700 dark:bg-transparent dark:border-transparent dark:text-white"
+            : "bg-gray-100 border-gray-200 text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700"
           }`}
         aria-label="Change theme color"
       >
@@ -61,7 +61,7 @@ export default function ThemeColorPicker() {
                   setThemeColor(color)
                   setIsOpen(false)
                 }}
-                className="relative flex items-center justify-center w-full h-10 rounded-md transition-transform hover:scale-105 focus:outline-none"
+                className="relative flex items-center justify-center w-full h-10 rounded-md transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                 style={{ backgroundColor: color.primary }}
                 aria-label={`Set theme to ${color.name}`}
               >

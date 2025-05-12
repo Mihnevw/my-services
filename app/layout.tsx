@@ -15,7 +15,7 @@ import { LanguageProvider } from "@/contexts/language-context";
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Online services",
+  title: "Future of your Business",
   description: "A modern website for the future of your business to help you grow your startup faster",
   icons: {
     icon: "/favicon.png",

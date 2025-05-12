@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react"
 import ThemeToggle from "@/components/theme-toggle"
 import ThemeColorPicker from "@/components/theme-color-picker"
 import AuthButtons from "@/components/auth/auth-buttons"
-import LanguageSelector from "@/components/language-selector"
+import LanguageSelector from "@/components/LanguageSelector"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function Navbar() {
