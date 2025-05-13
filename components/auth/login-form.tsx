@@ -1,10 +1,11 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useAuth } from "@/contexts/auth-context"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 type LoginFormProps = {
   onRegisterClick: () => void
@@ -15,6 +16,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false
   })
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{
@@ -25,10 +27,30 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
   const [isLoading, setIsLoading] = useState(false)
   const { currentColor } = useThemeColor()
   const { signIn, signInWithProvider } = useAuth()
+  const { t } = useLanguage()
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail')
+    const savedPassword = localStorage.getItem('rememberedPassword')
+    const rememberMe = localStorage.getItem('rememberMe') === 'true'
+    
+    if (savedEmail && savedPassword && rememberMe) {
+      setFormData(prev => ({
+        ...prev,
+        email: savedEmail,
+        password: savedPassword,
+        rememberMe: true
+      }))
+    }
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }))
   }
 
   const validateForm = () => {
@@ -61,9 +83,21 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
 
     try {
       await signIn(formData.email, formData.password)
+      
+      // Save credentials if remember me is checked
+      if (formData.rememberMe) {
+        localStorage.setItem('rememberedEmail', formData.email)
+        localStorage.setItem('rememberedPassword', formData.password)
+        localStorage.setItem('rememberMe', 'true')
+      } else {
+        // Clear saved credentials if remember me is unchecked
+        localStorage.removeItem('rememberedEmail')
+        localStorage.removeItem('rememberedPassword')
+        localStorage.removeItem('rememberMe')
+      }
     } catch (error) {
       setErrors({
-        general: error instanceof Error ? error.message : 'An error occurred during sign in'
+        general: t("incorrectUsernameOrPassword")
       })
     } finally {
       setIsLoading(false)
@@ -83,8 +117,8 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
   return (
     <div>
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to your account</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("loginTitle")}</h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">{t("loginDescription")}</p>
       </div>
 
       {errors.general && (
@@ -96,7 +130,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email
+            {t("email")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -119,7 +153,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Password
+            {t("password")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -156,12 +190,14 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
           <div className="flex items-center">
             <input
               id="remember-me"
-              name="remember-me"
+              name="rememberMe"
               type="checkbox"
+              checked={formData.rememberMe}
+              onChange={handleChange}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
-              Remember me
+              {t("rememberMe")}
             </label>
           </div>
 
@@ -170,7 +206,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
             onClick={onForgotPasswordClick}
             className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
           >
-            Forgot password?
+            {t("forgotPassword")}
           </button>
         </div>
 
@@ -198,16 +234,16 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
                 ></path>
               </svg>
             ) : null}
-            {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? t("signingIn") : t("signIn")}
           </button>
         </div>
       </form>
 
       <div className="mt-6 text-center">
         <p className="text-gray-600 dark:text-gray-400">
-          Don't have an account?{" "}
+          {t("dontHaveAccount")}
           <button onClick={onRegisterClick} className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-            Sign up
+            {t("signUp")}
           </button>
         </p>
       </div>
@@ -217,7 +253,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
           <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
+          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{t("orContinueWith")}</span>
         </div>
       </div>
 
@@ -227,7 +263,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
           onClick={() => handleSocialSignIn('google')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign in with Google</span>
+          <span className="sr-only">{t("signInWithGoogle")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
           </svg>
@@ -238,7 +274,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
           onClick={() => handleSocialSignIn('facebook')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign in with Facebook</span>
+          <span className="sr-only">{t("signInWithFacebook")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path
               fillRule="evenodd"
@@ -253,7 +289,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
           onClick={() => handleSocialSignIn('github')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign in with GitHub</span>
+          <span className="sr-only">{t("signInWithGitHub")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path
               fillRule="evenodd"

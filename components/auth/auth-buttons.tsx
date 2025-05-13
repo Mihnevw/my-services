@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
+import { User, ChevronDown } from "lucide-react"
 import AuthModal from "./auth-modal"
-import { LogOut, User, ChevronDown } from "lucide-react"
 import Link from "next/link"
 
 export default function AuthButtons() {
@@ -14,6 +15,7 @@ export default function AuthButtons() {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const { currentColor } = useThemeColor()
   const { user, signOut } = useAuth()
+  const { t } = useLanguage()
 
   const openLoginModal = () => {
     setModalView("login")
@@ -61,8 +63,40 @@ export default function AuthButtons() {
                     role="menuitem"
                     onClick={() => setShowProfileMenu(false)}
                   >
-                    Profile
+                    {t("profile")}
                   </Link>
+
+                  {/* Language Switcher
+                  <div className="px-4 py-2">
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                      {t("language")}
+                    </div>
+                    <div className="space-y-1">
+                      {LANGUAGES.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            setLanguage(lang)
+                            setShowProfileMenu(false)
+                          }}
+                          className={`w-full flex items-center px-2 py-1.5 text-sm rounded-md transition-colors ${
+                            language.code === lang.code
+                              ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                              : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          }`}
+                        >
+                          <span className="mr-2">{lang.flag}</span>
+                          {lang.name}
+                          {language.code === lang.code && (
+                            <Globe className="ml-auto h-4 w-4" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-100 dark:border-gray-700 my-1"></div> */}
+
                   <button
                     onClick={() => {
                       setShowSignOutConfirm(true)
@@ -71,7 +105,7 @@ export default function AuthButtons() {
                     className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                     role="menuitem"
                   >
-                    Sign out
+                    {t("signOut")}
                   </button>
                 </div>
               </div>
@@ -84,17 +118,17 @@ export default function AuthButtons() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Sign Out
+                {t("signOut")}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Are you sure you want to sign out of your account?
+                {t("signOutConfirm")}
               </p>
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={() => setShowSignOutConfirm(false)}
                   className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={handleSignOut}
@@ -103,7 +137,7 @@ export default function AuthButtons() {
                     background: `linear-gradient(135deg, ${currentColor.secondary} 0%, ${currentColor.primary} 100%)`,
                   }}
                 >
-                  Sign Out
+                  {t("signOut")}
                 </button>
               </div>
             </div>
@@ -120,7 +154,7 @@ export default function AuthButtons() {
           onClick={openLoginModal}
           className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
         >
-          Login
+          {t("login")}
         </button>
         <button
           onClick={openRegisterModal}
@@ -129,7 +163,7 @@ export default function AuthButtons() {
             background: `linear-gradient(135deg, ${currentColor.secondary} 0%, ${currentColor.primary} 100%)`,
           }}
         >
-          Register
+          {t("register")}
         </button>
       </div>
 

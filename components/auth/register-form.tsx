@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useAuth } from "@/contexts/auth-context"
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 type RegisterFormProps = {
   onLoginClick: () => void
@@ -29,6 +30,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { currentColor } = useThemeColor()
   const { signUp, signInWithProvider } = useAuth()
+  const { t } = useLanguage()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -99,8 +101,8 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
   return (
     <div>
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create an account</h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">Sign up to get started</p>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t("registerTitle")}</h2>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">{t("registerDescription")}</p>
       </div>
 
       {errors.general && (
@@ -112,7 +114,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Full Name
+            {t("fullName")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -127,7 +129,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
               className={`form-input w-full pl-10 py-2 border ${
                 errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
-              placeholder="John Doe"
+              placeholder={t("fullNameRegister")}
             />
           </div>
           {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
@@ -135,7 +137,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
 
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Email
+            {t("email")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -150,7 +152,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
               className={`form-input w-full pl-10 py-2 border ${
                 errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
-              placeholder="your.email@example.com"
+              placeholder={t("emailRegister")}
             />
           </div>
           {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
@@ -158,7 +160,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Password
+            {t("password")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -190,13 +192,13 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
           </div>
           {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           {!errors.password && (
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Password must be at least 8 characters</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t("passwordMustBeAtLeast8Characters")}</p>
           )}
         </div>
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Confirm Password
+            {t("confirmPassword")}
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -253,16 +255,16 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
                 ></path>
               </svg>
             ) : null}
-            {isLoading ? "Creating account..." : "Create account"}
+            {isLoading ? t("creatingAccount") : t("createAccount")}
           </button>
         </div>
       </form>
 
       <div className="mt-6 text-center">
         <p className="text-gray-600 dark:text-gray-400">
-          Already have an account?{" "}
+            {t("alreadyHaveAccount")}
           <button onClick={onLoginClick} className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-            Sign in
+            {t("signIn")}
           </button>
         </p>
       </div>
@@ -272,7 +274,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
           <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
+          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">{t("orContinueWith")}</span>
         </div>
       </div>
 
@@ -282,7 +284,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
           onClick={() => handleSocialSignIn('google')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign up with Google</span>
+          <span className="sr-only">{t("signUpWithGoogle")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
           </svg>
@@ -293,7 +295,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
           onClick={() => handleSocialSignIn('facebook')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign up with Facebook</span>
+          <span className="sr-only">{t("signUpWithFacebook")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path
               fillRule="evenodd"
@@ -308,7 +310,7 @@ export default function RegisterForm({ onLoginClick }: RegisterFormProps) {
           onClick={() => handleSocialSignIn('github')}
           className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
-          <span className="sr-only">Sign up with GitHub</span>
+          <span className="sr-only">{t("signUpWithGitHub")}</span>
           <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
             <path
               fillRule="evenodd"
