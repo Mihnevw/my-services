@@ -145,7 +145,7 @@ export async function POST(req: Request) {
 
     // Send confirmation email
     await transporter.sendMail({
-      from: process.env.SMTP_FROM,
+      from: "Team Mihnev",
       to: email,
       subject: 'Thank you for contacting us',
       html: `
@@ -155,7 +155,7 @@ export async function POST(req: Request) {
         <p>Here's a copy of your message:</p>
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong> ${message}</p>
-        <p>Best regards,<br>Your Team</p>
+        <p>Best regards,<br>Team Mihnev</p>
       `,
     });
 

@@ -96,17 +96,6 @@ export default function Blog() {
             </AnimatedSection>
           ))}
         </div>
-
-        <AnimatedSection delay={200}>
-          <div className="text-center mt-12">
-            <Link
-              href="/blog"
-              className="btn-primary inline-flex items-center justify-center text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
-            >
-              {t("blogPost1Link")}
-            </Link>
-          </div>
-        </AnimatedSection>
       </div>
       <NotificationStack />
     </section>

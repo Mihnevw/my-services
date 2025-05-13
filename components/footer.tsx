@@ -108,7 +108,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Resources</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">{t("resources")}</h3>
             <ul className="space-y-2">
               {resourceItems.map((item) => (
                 <li key={item.name}>

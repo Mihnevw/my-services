@@ -1,4 +1,5 @@
 "use client"
+
 import { Check } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useLanguage } from "@/contexts/language-context"

@@ -2,7 +2,7 @@
 
 import AnimatedSection from "./animated-section"
 import Link from "next/link"
-import { CheckCircle } from "lucide-react"
+import { ArrowRight, CheckCircle } from "lucide-react"
 import { useThemeColor } from "@/contexts/theme-color-context"
 import { useLanguage } from "@/contexts/language-context"
 
@@ -15,7 +15,7 @@ export default function ServicesPreview() {
   const previewServices = [
     {
       title: t("webDesign"),
-      price: "$1,200",
+      price: "",
       description: t("webDesignDesc"),
       icon: (
         <svg
@@ -38,7 +38,7 @@ export default function ServicesPreview() {
     },
     {
       title: t("webDev"),
-      price: "$2,500",
+      price: "",
       description: t("webDevDesc"),
       icon: (
         <svg
@@ -114,6 +114,7 @@ export default function ServicesPreview() {
               }}
             >
               {t("seeAllServices")}
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </AnimatedSection>

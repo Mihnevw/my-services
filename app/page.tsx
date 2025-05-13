@@ -27,7 +27,7 @@ export default function Home() {
       <ServicesPreview />
       <Testimonials />
       <BlogPreview />
-      <Pricing />
+      {/* <Pricing /> */}
       <Footer />
     </main>
   )

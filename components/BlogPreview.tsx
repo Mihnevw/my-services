@@ -104,6 +104,7 @@ export default function BlogPreview() {
               className="btn-primary inline-flex items-center justify-center text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
             >
               {t("blogPost1Link")}
+              <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </AnimatedSection>
