@@ -1,71 +1,61 @@
-import Navbar from "@/components/navbar"
+"use client";
 
-export const metadata = {
-  title: "Privacy Policy - Portfolio Website",
-  description: "Our commitment to protecting your privacy and personal data",
-}
+import Navbar from "@/components/navbar"
+import { useLanguage } from "@/contexts/language-context"
 
 export default function PrivacyPolicyPage() {
+  const { t } = useLanguage();
+  const today = new Date().toLocaleDateString();
   return (
     <>
       <Navbar />
       <main className="min-h-screen bg-white dark:bg-gray-950 pt-20">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">Privacy Policy</h1>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">{t("privacyPolicyTitle")}</h1>
           <div className="prose dark:prose-invert max-w-none">
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Last updated: {new Date().toLocaleDateString()}
+              {t("privacyPolicyLastUpdated").replace("{date}", today)}
             </p>
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">1. Information We Collect</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t("privacyPolicySection1Title")}</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                We collect information that you provide directly to us, including when you:
+                {t("privacyPolicySection1Content")}
               </p>
               <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
-                <li>Contact us through our website</li>
-                <li>Subscribe to our newsletter</li>
-                <li>Request a quote or service</li>
-                <li>Apply for a job</li>
+                {JSON.parse(t("privacyPolicySection1List")).map((item: string, i: number) => <li key={i}>{item}</li>)}
               </ul>
             </section>
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">2. How We Use Your Information</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t("privacyPolicySection2Title")}</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                We use the information we collect to:
+                {t("privacyPolicySection2Content")}
               </p>
               <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
-                <li>Provide and maintain our services</li>
-                <li>Respond to your inquiries and requests</li>
-                <li>Send you marketing communications (with your consent)</li>
-                <li>Improve our website and services</li>
+                {JSON.parse(t("privacyPolicySection2List")).map((item: string, i: number) => <li key={i}>{item}</li>)}
               </ul>
             </section>
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">3. Data Security</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t("privacyPolicySection3Title")}</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.
+                {t("privacyPolicySection3Content")}
               </p>
             </section>
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">4. Your Rights</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t("privacyPolicySection4Title")}</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                You have the right to:
+                {t("privacyPolicySection4Content")}
               </p>
               <ul className="list-disc pl-6 text-gray-600 dark:text-gray-300">
-                <li>Access your personal data</li>
-                <li>Correct inaccurate data</li>
-                <li>Request deletion of your data</li>
-                <li>Object to processing of your data</li>
-                <li>Data portability</li>
+                {JSON.parse(t("privacyPolicySection4List")).map((item: string, i: number) => <li key={i}>{item}</li>)}
               </ul>
             </section>
             <section className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">5. Contact Us</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{t("privacyPolicySection5Title")}</h2>
               <p className="text-gray-600 dark:text-gray-300">
-                If you have any questions about this Privacy Policy, please contact us at:
+                {t("privacyPolicySection5Content")}
               </p>
               <p className="text-gray-600 dark:text-gray-300">
-                Email: privacy@example.com
+                {t("privacyPolicySection5Email")}
               </p>
             </section>
           </div>

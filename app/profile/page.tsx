@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import ProfilePage from "@/components/profile/profile-page"
 import Navbar from "@/components/navbar"
-import { ArrowLeft } from "lucide-react"
+//import { ArrowLeft } from "lucide-react"
 
 export default function Profile() {
   const { user, isLoading } = useAuth()
@@ -38,8 +38,6 @@ export default function Profile() {
             onClick={() => router.push("/")}
             className="flex items-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 mb-6 transition-colors"
           >
-            <ArrowLeft size={18} className="mr-2" />
-            Back to Home
           </button>
           <ProfilePage />
         </div>
