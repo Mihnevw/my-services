@@ -1,12 +1,14 @@
 "use client"
 
-import { CheckCircle, Code, Palette, Search, Settings } from "lucide-react"
+import { CheckCircle, Code, Palette, Search, Settings, ArrowRight } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useLanguage } from "@/contexts/language-context"
-
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 export default function Services() {
   const { t } = useLanguage();
-  
+  const router = useRouter();
+
   const services = [
     {
       title: t("webDesign"),
@@ -56,7 +58,7 @@ export default function Services() {
               {t("whatIOffer")}
             </h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
-            <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-8">
               {t("servicesDescription")}
             </p>
           </div>
@@ -83,6 +85,17 @@ export default function Services() {
           ))}
         </div>
       </div>
+      <AnimatedSection delay={200}>
+        <div className="text-center mt-12">
+          <Link
+            href="/pricing"
+            className="btn-primary inline-flex items-center justify-center text-white font-medium py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
+          >
+            {t("seePricing")}
+            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </AnimatedSection>
 
       {/* Wave divider */}
       <div className="custom-shape-divider-bottom-1 mt-20">

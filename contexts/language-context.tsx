@@ -54,11 +54,17 @@ export const translations: { [lang: string]: TranslationDict } = {
     pricing: "Pricing",
     testimonials: "Testimonials",
     blog: "Blog",
+    resources: "Resources",
     contact: "Contact",
     login: "Login",
     register: "Register",
     logout: "Logout",
     profile: "Profile",
+    signOut: "Sign Out",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
+    cookiePolicy: "Cookie Policy",
+    allRightsReserved: "All rights reserved",
 
     // Hero
     welcome: "",
@@ -66,7 +72,47 @@ export const translations: { [lang: string]: TranslationDict } = {
     heroDescription: "I create beautiful, functional websites that help businesses grow and stand out in the digital landscape",
     getInTouch: "Get in Touch",
     viewMyWork: "View My Work",
-    
+    contactDescription: "If you have any questions or would like to discuss a project, please don't hesitate to contact me. I'm here to help you achieve your goals and make your online presence shine.",
+    contactInformation: "Contact Information",
+    connectWithMe: "Connect with me",
+    name: "Name",
+    namePlaceholder: "Enter your name",
+    email: "Email",
+    emailPlaceholder: "Enter your email",
+    subject: "Subject",
+    subjectPlaceholder: "Enter your subject",
+    message: "Message",
+    messagePlaceholder: "Enter your message",
+    sendMessage: "Send Message",
+    yourMessage: "Your Message",
+    sendMessageBtn: "Send Message",
+
+    //Login and Register
+    loginTitle: "Login to your account",
+    registerTitle: "Create an account",
+    loginDescription: "Login to your account to continue",
+    registerDescription: "Create an account to continue",
+    confirmPassword: "Confirm Password",
+    passwordMustBeAtLeast8Characters: "Password must be at least 8 characters",
+    alreadyHaveAccount: "Already have an account?",
+    creatingAccount: "Creating account...",
+    createAccount: "Create account",
+    fullNameRegister: "Full Name",
+    emailRegister: "Email",
+    loginBtn: "Login",
+    registerBtn: "Register",
+    dontHaveAccount: "Don't have an account?",
+    orContinueWith: "Or continue with",
+    signInWithGoogle: "Sign in with Google",
+    signInWithFacebook: "Sign in with Facebook",
+    signInWithGitHub: "Sign in with GitHub",
+    forgotPassword: "Forgot password?",
+    rememberMe: "Remember me",
+    signingIn: "Signing in...",
+    signIn: "Sign in",
+    signUp: "Sign up",
+    password: "Password",
+
     // Intro section
     introduction: "Introduction",
     whatIDo: "What I Do & How I Can Help",
@@ -94,10 +140,11 @@ export const translations: { [lang: string]: TranslationDict } = {
     whatIOffer: "What I Offer",
     servicesDescription: "I offer a range of services to help you establish a strong online presence",
     seeAllServices: "See All Services",
+    seePricing: "See Pricing",
 
     // Service items
     webDesign: "Web Design",
-    webDesignPrice: "$1,200",
+    webDesignPrice: "",
     webDesignDesc: "Custom website design focused on user experience and brand identity.",
     webDesignFeatures: JSON.stringify([
       "Responsive design for all devices",
@@ -107,7 +154,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     webDev: "Web Development",
-    webDevPrice: "$2,500",
+    webDevPrice: "",
     webDevDesc: "Full-stack development of websites and web applications.",
     webDevFeatures: JSON.stringify([
       "Custom coding with modern technologies",
@@ -117,7 +164,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     seoOptimization: "SEO Optimization",
-    seoPrice: "$800",
+    seoPrice: "",
     seoDesc: "Improve your website's visibility in search engines.",
     seoFeatures: JSON.stringify([
       "Keyword research and analysis",
@@ -127,7 +174,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     maintenance: "Maintenance",
-    maintenancePrice: "$300/month",
+    maintenancePrice: "",
     maintenanceDesc: "Keep your website secure, updated, and running smoothly.",
     maintenanceFeatures: JSON.stringify([
       "Regular software updates",
@@ -208,8 +255,8 @@ export const translations: { [lang: string]: TranslationDict } = {
     planPremiumCTA: "Choose Premium",
     pricingMostPopular: "Most Popular",
     PlanPriceBasic: "$300",
-    PlanPriceStandard: "$870",
-    PlanPricePremium: "$1200",
+    PlanPriceStandard: "$680",
+    PlanPricePremium: "$1300",
     pricingFeatureBasic1: "5-page responsive website",
     pricingFeatureBasic2: "Basic SEO setup",
     pricingFeatureBasic3: "Contact form",
@@ -381,6 +428,95 @@ export const translations: { [lang: string]: TranslationDict } = {
     newPortfolioItemCreated: "New portfolio item created successfully!",
     portfolioItemDeleted: "Portfolio item deleted successfully!",
     portfolioItemsReordered: "Portfolio items reordered successfully!",
+
+    // Privacy Policy Page
+    privacyPolicyTitle: "Privacy Policy",
+    privacyPolicyLastUpdated: "Last updated: {date}",
+    privacyPolicySection1Title: "1. Information We Collect",
+    privacyPolicySection1Content: "We collect information that you provide directly to us, including when you:",
+    privacyPolicySection1List: JSON.stringify([
+      "Contact us through our website",
+      "Subscribe to our newsletter",
+      "Request a quote or service",
+      "Apply for a job"
+    ]),
+    privacyPolicySection2Title: "2. How We Use Your Information",
+    privacyPolicySection2Content: "We use the information we collect to:",
+    privacyPolicySection2List: JSON.stringify([
+      "Provide and maintain our services",
+      "Respond to your inquiries and requests",
+      "Send you marketing communications (with your consent)",
+      "Improve our website and services"
+    ]),
+    privacyPolicySection3Title: "3. Data Security",
+    privacyPolicySection3Content: "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.",
+    privacyPolicySection4Title: "4. Your Rights",
+    privacyPolicySection4Content: "You have the right to:",
+    privacyPolicySection4List: JSON.stringify([
+      "Access your personal data",
+      "Correct inaccurate data",
+      "Request deletion of your data",
+      "Object to processing of your data",
+      "Data portability"
+    ]),
+    privacyPolicySection5Title: "5. Contact Us",
+    privacyPolicySection5Content: "If you have any questions about this Privacy Policy, please contact us at:",
+    privacyPolicySection5Email: "Email: privacy@example.com",
+
+    // Terms of Service Page
+    termsOfServiceTitle: "Terms of Service",
+    termsOfServiceLastUpdated: "Last updated: {date}",
+    termsOfServiceSection1Title: "1. Acceptance of Terms",
+    termsOfServiceSection1Content: "By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.",
+    termsOfServiceSection2Title: "2. Use License",
+    termsOfServiceSection2Content: "Permission is granted to temporarily download one copy of the materials (information or software) on our website for personal, non-commercial transitory viewing only.",
+    termsOfServiceSection3Title: "3. Disclaimer",
+    termsOfServiceSection3Content: "The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
+    termsOfServiceSection4Title: "4. Limitations",
+    termsOfServiceSection4Content: "In no event shall we or our suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website.",
+    termsOfServiceSection5Title: "5. Revisions and Errata",
+    termsOfServiceSection5Content: "The materials appearing on our website could include technical, typographical, or photographic errors. We do not warrant that any of the materials on our website are accurate, complete, or current.",
+    termsOfServiceSection6Title: "6. Links",
+    termsOfServiceSection6Content: "We have not reviewed all of the sites linked to our website and are not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by us of the site.",
+    termsOfServiceSection7Title: "7. Contact Information",
+    termsOfServiceSection7Content: "If you have any questions about these Terms of Service, please contact us at:",
+    termsOfServiceSection7Email: "Email: legal@example.com",
+
+    // Cookie Policy Page
+    cookiePolicyTitle: "Cookie Policy",
+    cookiePolicyLastUpdated: "Last updated: {date}",
+    cookiePolicySection1Title: "1. What Are Cookies",
+    cookiePolicySection1Content: "Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and provide a better user experience.",
+    cookiePolicySection2Title: "2. How We Use Cookies",
+    cookiePolicySection2Content: "We use cookies for the following purposes:",
+    cookiePolicySection2List: JSON.stringify([
+      "Essential cookies: Required for the website to function properly",
+      "Analytics cookies: Help us understand how visitors interact with our website",
+      "Preference cookies: Remember your settings and preferences",
+      "Marketing cookies: Used to track visitors across websites"
+    ]),
+    cookiePolicySection3Title: "3. Types of Cookies We Use",
+    cookiePolicySection3Content: "We use the following types of cookies:",
+    cookiePolicySection3List: JSON.stringify([
+      "Session cookies: Temporary cookies that expire when you close your browser",
+      "Persistent cookies: Remain on your device for a set period of time",
+      "First-party cookies: Set by our website",
+      "Third-party cookies: Set by external services we use"
+    ]),
+    cookiePolicySection4Title: "4. Managing Cookies",
+    cookiePolicySection4Content: "You can control and/or delete cookies as you wish. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed.",
+    cookiePolicySection5Title: "5. Contact Us",
+    cookiePolicySection5Content: "If you have any questions about our Cookie Policy, please contact us at:",
+    cookiePolicySection5Email: "Email: privacy@example.com",
+
+    // Contact Form
+    pleaseEnterValidEmail: "Please enter a valid email address",
+    uncommonEmailDomain: "This email domain is not in our list of common providers. Please make sure it's correct.",
+    invalidEmail: "Invalid email address",
+    somethingWentWrong: "Something went wrong",
+    messageSentSuccessfully: "Message sent successfully!",
+    failedToSendMessage: "Failed to send message",
+    phone: "Phone",
   },
 
   bg: {
@@ -404,19 +540,65 @@ export const translations: { [lang: string]: TranslationDict } = {
     pricing: "Цени",
     testimonials: "Отзиви",
     blog: "Блог",
+    resources: "Ресурси",
     contact: "Контакти",
     login: "Вход",
     register: "Регистрация",
     logout: "Изход",
     profile: "Профил",
+    signOut: "Изход",
+    signOutConfirm: "Сигурен ли сте, че искате да излезете от профила си?",
+    privacyPolicy: "Политика за поверителност",
+    termsOfService: "Общи условия",
+    cookiePolicy: "Политика за бисквитки",
+    allRightsReserved: "Всички права запазени",
 
     // Hero
     welcome: "",
     welcomeToPortfolio: "Добре дошли в Бъдещето на вашия бизнес",
     heroDescription: "Създавам красиви, функционални уебсайтове, които помагат на бизнесите да растат и да се открояват в дигиталния пейзаж",
     getInTouch: "Свържете се с мен",
-    viewMyWork: "Вижте моята работа",
-    
+    viewMyWork: "Вижте моята работа", contactDescription: "Ако имате въпроси или искате да обсъдите проект, моля, не се колебайте да се свържете с мен. Ще бъда тук, за да помогна да постигнете вашите цели и да направите вашето онлайн присъствие блестящо.",
+    contactInformation: "Информация за контакт",
+    connectWithMe: "Свържете се с мен",
+    name: "Име", namePlaceholder: "Въведете вашето име",
+    email: "Имейл",
+    emailPlaceholder: "Въведете вашия имейл",
+    subject: "Тема",
+    subjectPlaceholder: "Въведете темата",
+    message: "Съобщение",
+    messagePlaceholder: "Въведете вашето съобщение",
+    sendMessage: "Изпрати съобщение",
+    yourMessage: "Вашето съобщение",
+    sending: "Изпращане...",
+    sendMessageBtn: "Изпрати съобщение",
+
+    // Login and Register
+    loginTitle: "Вход в вашият акаунт",
+    registerTitle: "Създайте акаунт",
+    loginDescription: "Влезте във вашият акаунт за да продължите",
+    registerDescription: "Създайте акаунт за да продължите",
+    confirmPassword: "Потвърди паролата",
+    passwordMustBeAtLeast8Characters: "Паролата трябва да бъде поне 8 символа",
+    alreadyHaveAccount: "Вече имате акаунт?",
+    creatingAccount: "Създавам акаунт...",
+    createAccount: "Създай акаунт",
+    fullNameRegister: "Име и фамилия",
+    emailRegister: "Имейл",
+    loginBtn: "Вход",
+    registerBtn: "Регистрация",
+    dontHaveAccount: "Нямате акаунт?",
+    orContinueWith: "Или продължете с",
+    signInWithGoogle: "Вход с Google",
+    signInWithFacebook: "Вход с Facebook",
+    signInWithGitHub: "Вход с GitHub",
+    forgotPassword: "Забравена парола?",
+    rememberMe: "Запомни ме",
+    signingIn: "Вход...",
+    signIn: "Вход",
+    signUp: "Регистрация",
+    password: "Парола",
+
     // Intro section
     introduction: "Въведение",
     whatIDo: "Какво правя и как мога да помогна",
@@ -444,10 +626,12 @@ export const translations: { [lang: string]: TranslationDict } = {
     whatIOffer: "Какво предлагам",
     servicesDescription: "Предлагам набор от услуги, за да помогна на вашия бизнес да установи силно онлайн присъствие",
     seeAllServices: "Вижте всички услуги",
+    seePricing: "Вижте цените",
+
 
     // Service items
     webDesign: "Уеб дизайн",
-    webDesignPrice: "1200 лв.",
+    webDesignPrice: "",
     webDesignDesc: "Персонализиран уеб дизайн, фокусиран върху потребителското изживяване и самоличността на марката.",
     webDesignFeatures: JSON.stringify([
       "Отзивчив дизайн за всички устройства",
@@ -457,7 +641,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     webDev: "Уеб разработка",
-    webDevPrice: "2500 лв.",
+    webDevPrice: "",
     webDevDesc: "Пълноценна разработка на уебсайтове и уеб приложения.",
     webDevFeatures: JSON.stringify([
       "Персонализирано кодиране с модерни технологии",
@@ -467,7 +651,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     seoOptimization: "SEO оптимизация",
-    seoPrice: "800 лв.",
+    seoPrice: "",
     seoDesc: "Подобрете видимостта на вашия уебсайт в търсачките.",
     seoFeatures: JSON.stringify([
       "Изследване и анализ на ключови думи",
@@ -477,7 +661,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     ]),
 
     maintenance: "Поддръжка",
-    maintenancePrice: "300 лв./месец",
+    maintenancePrice: "",
     maintenanceDesc: "Поддържайте уебсайта си сигурен, актуализиран и работещ плавно.",
     maintenanceFeatures: JSON.stringify([
       "Редовни софтуерни актуализации",
@@ -557,9 +741,9 @@ export const translations: { [lang: string]: TranslationDict } = {
     planPremiumDesc: "Цялостно решение за установени бизнеси",
     planPremiumCTA: "Изберете Премиум",
     pricingMostPopular: "Най-популярен",
-    PlanPriceBasic: "300 лв.",
-    PlanPriceStandard: "870 лв.",
-    PlanPricePremium: "1200 лв.",
+    PlanPriceBasic: "520 лв.",
+    PlanPriceStandard: "1200 лв.",
+    PlanPricePremium: "2300 лв.",
     pricingFeatureBasic1: "5-страничен отзивчив уебсайт",
     pricingFeatureBasic2: "Базова SEO настройка",
     pricingFeatureBasic3: "Контактна форма",
@@ -731,6 +915,95 @@ export const translations: { [lang: string]: TranslationDict } = {
     newPortfolioItemCreated: "Нов проект в портфолиото е създаден успешно!",
     portfolioItemDeleted: "Проектът в портфолиото е изтрит успешно!",
     portfolioItemsReordered: "Проектите в портфолиото са пренаредени успешно!",
+
+    // Privacy Policy Page
+    privacyPolicyTitle: "Политика за поверителност",
+    privacyPolicyLastUpdated: "Последна актуализация: {date}",
+    privacyPolicySection1Title: "1. Каква информация събираме",
+    privacyPolicySection1Content: "Събираме информация, която предоставяте директно на нас, включително когато:",
+    privacyPolicySection1List: JSON.stringify([
+      "Свържете се с нас чрез нашия уебсайт",
+      "Абонирате се за нашия бюлетин",
+      "Заявите оферта или услуга",
+      "Кандидатствате за работа"
+    ]),
+    privacyPolicySection2Title: "2. Как използваме вашата информация",
+    privacyPolicySection2Content: "We use the information we collect to:",
+    privacyPolicySection2List: JSON.stringify([
+      "Provide and maintain our services",
+      "Respond to your inquiries and requests",
+      "Send you marketing communications (with your consent)",
+      "Improve our website and services"
+    ]),
+    privacyPolicySection3Title: "3. Сигурност на данните",
+    privacyPolicySection3Content: "We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.",
+    privacyPolicySection4Title: "4. Вашите права",
+    privacyPolicySection4Content: "You have the right to:",
+    privacyPolicySection4List: JSON.stringify([
+      "Access your personal data",
+      "Correct inaccurate data",
+      "Request deletion of your data",
+      "Object to processing of your data",
+      "Data portability"
+    ]),
+    privacyPolicySection5Title: "5. Свържете се с нас",
+    privacyPolicySection5Content: "If you have any questions about this Privacy Policy, please contact us at:",
+    privacyPolicySection5Email: "Email: privacy@example.com",
+
+    // Terms of Service Page
+    termsOfServiceTitle: "Общи условия",
+    termsOfServiceLastUpdated: "Последна актуализация: {date}",
+    termsOfServiceSection1Title: "1. Приемане на условията",
+    termsOfServiceSection1Content: "By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.",
+    termsOfServiceSection2Title: "2. Лиценз за ползване",
+    termsOfServiceSection2Content: "Permission is granted to temporarily download one copy of the materials (information or software) on our website for personal, non-commercial transitory viewing only.",
+    termsOfServiceSection3Title: "3. Отказ от отговорност",
+    termsOfServiceSection3Content: "The materials on our website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.",
+    termsOfServiceSection4Title: "4. Ограничения",
+    termsOfServiceSection4Content: "In no event shall we or our suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on our website.",
+    termsOfServiceSection5Title: "5. Ревизии и грешки",
+    termsOfServiceSection5Content: "The materials appearing on our website could include technical, typographical, or photographic errors. We do not warrant that any of the materials on our website are accurate, complete, or current.",
+    termsOfServiceSection6Title: "6. Връзки",
+    termsOfServiceSection6Content: "We have not reviewed all of the sites linked to our website and are not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by us of the site.",
+    termsOfServiceSection7Title: "7. Контактна информация",
+    termsOfServiceSection7Content: "If you have any questions about these Terms of Service, please contact us at:",
+    termsOfServiceSection7Email: "Email: legal@example.com",
+
+    // Cookie Policy Page
+    cookiePolicyTitle: "Политика за бисквитки",
+    cookiePolicyLastUpdated: "Последна актуализация: {date}",
+    cookiePolicySection1Title: "1. Какво представляват бисквитките",
+    cookiePolicySection1Content: "Бисквитките са малки текстови файлове, които се съхраняват на вашия компютър или мобилно устройство, когато посещавате уебсайт. Те се използват широко, за да направят уебсайтовете по-ефективни и да осигурят по-добро потребителско изживяване.",
+    cookiePolicySection2Title: "2. Как използваме бисквитките",
+    cookiePolicySection2Content: "Използваме бисквитки за следните цели:",
+    cookiePolicySection2List: JSON.stringify([
+      "Задължителни бисквитки: Необходими за правилното функциониране на уебсайта",
+      "Аналитични бисквитки: Помагат ни да разберем как посетителите взаимодействат с нашия уебсайт",
+      "Бисквитки за предпочитания: Запомнят вашите настройки и предпочитания",
+      "Маркетингови бисквитки: Използват се за проследяване на посетителите в различни уебсайтове"
+    ]),
+    cookiePolicySection3Title: "3. Видове бисквитки, които използваме",
+    cookiePolicySection3Content: "Използваме следните видове бисквитки:",
+    cookiePolicySection3List: JSON.stringify([
+      "Сесийни бисквитки: Временни бисквитки, които изтичат при затваряне на браузъра",
+      "Постоянни бисквитки: Остават на вашето устройство за определен период от време",
+      "Бисквитки от първа страна: Задават се от нашия уебсайт",
+      "Бисквитки от трети страни: Задават се от външни услуги, които използваме"
+    ]),
+    cookiePolicySection4Title: "4. Управление на бисквитките",
+    cookiePolicySection4Content: "Можете да контролирате и/или изтривате бисквитки, както желаете. Можете да изтриете всички бисквитки, които вече са на вашия компютър, и можете да настроите повечето браузъри да ги блокират.",
+    cookiePolicySection5Title: "5. Свържете се с нас",
+    cookiePolicySection5Content: "Ако имате въпроси относно нашата Политика за бисквитки, моля свържете се с нас на:",
+    cookiePolicySection5Email: "Имейл: privacy@example.com",
+
+    // Contact Form
+    pleaseEnterValidEmail: "Моля въведете валиден имейл адрес",
+    uncommonEmailDomain: "Това домейн не е в нашия списък на общи домейни. Моля, уверете се, че е валиден.",
+    invalidEmail: "Невалиден имейл адрес",
+    somethingWentWrong: "Нещо се обърка",
+    messageSentSuccessfully: "Съобщението е изпратено успешно!",
+    failedToSendMessage: "Неуспешно изпращане на съобщение",
+    phone: "Телефон",
   },
 }
 
@@ -756,7 +1029,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
       return undefined;
     }, dict as any);
-    
+
     return typeof value === 'string' ? value : key;
   }
 

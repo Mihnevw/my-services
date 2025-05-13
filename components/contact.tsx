@@ -5,6 +5,7 @@ import { Mail, Phone, MapPin, Send } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { toast } from "sonner"
 import { useLanguage } from "@/contexts/language-context"
+import { useRouter } from "next/navigation"
 
 // Common email domains
 const COMMON_DOMAINS = [
@@ -68,6 +69,7 @@ const socialLinks = [
 
 export default function Contact() {
   const { t } = useLanguage()
+  const router = useRouter()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -77,12 +79,13 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [emailError, setEmailError] = useState("")
   const [emailWarning, setEmailWarning] = useState("")
+  const [formStatus, setFormStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
 
   const validateEmail = (email: string) => {
     // Basic email format validation
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (!emailRegex.test(email)) {
-      return { isValid: false, error: "Please enter a valid email address" }
+      return { isValid: false, error: t("pleaseEnterValidEmail") }
     }
 
     // Check domain
@@ -90,7 +93,7 @@ export default function Contact() {
     if (!COMMON_DOMAINS.includes(domain)) {
       return {
         isValid: true,
-        warning: "This email domain is not in our list of common providers. Please make sure it's correct."
+        warning: t("uncommonEmailDomain")
       }
     }
 
@@ -108,33 +111,55 @@ export default function Contact() {
         setEmailWarning("")
       } else {
         const validation = validateEmail(value)
-        setEmailError(validation.error || "")
-        setEmailWarning(validation.warning || "")
+        if (!validation.isValid) {
+          setEmailError(t("pleaseEnterValidEmail"))
+          setEmailWarning("")
+        } else {
+          // Check if domain is not in common domains
+          const domain = value.split('@')[1].toLowerCase()
+          if (!COMMON_DOMAINS.includes(domain)) {
+            setEmailError(t("pleaseEnterValidEmail"))
+            setEmailWarning("")
+          } else {
+            setEmailError("")
+            setEmailWarning("")
+          }
+        }
       }
     }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormStatus({ type: null, message: '' })
 
     // Validate email before submission
     const validation = validateEmail(formData.email)
     if (!validation.isValid) {
-      toast.error(validation.error || "Please enter a valid email address")
+      const errorMessage = validation.error || t("invalidEmail")
+      setFormStatus({ type: 'error', message: errorMessage })
+      toast.error(errorMessage)
+      setIsSubmitting(false)
       return
     }
 
-    // Show warning if domain is not common
-    if (validation.warning) {
-      const proceed = window.confirm(
-        `${validation.warning}\n\nDo you want to proceed anyway?`
-      )
-      if (!proceed) return
+    // If there's an email error or warning, prevent submission
+    if (emailError || emailWarning) {
+      const errorMessage = t("invalidEmail")
+      setFormStatus({ type: 'error', message: errorMessage })
+      toast.error(errorMessage)
+      setIsSubmitting(false)
+      return
     }
 
     setIsSubmitting(true)
 
     try {
+      // Additional validation before making the API call
+      if (!formData.email || emailError || emailWarning) {
+        throw new Error(t("invalidEmail"))
+      }
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -146,15 +171,23 @@ export default function Contact() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong')
+        throw new Error(data.error || t("somethingWentWrong"))
       }
 
-      toast.success('Message sent successfully!')
+      const successMessage = t("messageSentSuccessfully")
+      setFormStatus({ type: 'success', message: successMessage })
+      toast.success(successMessage)
       setFormData({ name: "", email: "", subject: "", message: "" })
       setEmailError("")
       setEmailWarning("")
+
+      setTimeout(() => {
+        router.push('/')
+      }, 1500)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to send message')
+      const errorMessage = error instanceof Error ? error.message : t("failedToSendMessage")
+      setFormStatus({ type: 'error', message: errorMessage })
+      toast.error(errorMessage)
     } finally {
       setIsSubmitting(false)
     }
@@ -215,7 +248,7 @@ export default function Contact() {
                       href="tel:+359899888888"
                       className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                     >
-                      +359 89 9 888 888
+                      +359 88 8 888 888
                     </a>
                   </div>
                 </div>
@@ -257,6 +290,14 @@ export default function Contact() {
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t("sendMessage")}</h3>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                {formStatus.type && (
+                  <div className={`p-4 rounded-lg ${formStatus.type === 'success'
+                      ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800'
+                      : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
+                    }`}>
+                    {formStatus.message}
+                  </div>
+                )}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("name")} *
@@ -266,6 +307,7 @@ export default function Contact() {
                     id="name"
                     name="name"
                     value={formData.name}
+                    placeholder={t("name")}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
@@ -283,9 +325,9 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className={`w-full px-4 py-2 border ${
-                      emailError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-                    } rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white`}
+                    placeholder={t("email")}
+                    className={`w-full px-4 py-2 border ${emailError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                      } rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white`}
                   />
                   {emailError && <p className="mt-1 text-sm text-red-500">{emailError}</p>}
                   {emailWarning && <p className="mt-1 text-sm text-yellow-500">{emailWarning}</p>}
@@ -302,6 +344,7 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
+                    placeholder={t("subject")}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                 </div>
@@ -346,7 +389,7 @@ export default function Contact() {
                   ) : (
                     <Send className="h-5 w-5 mr-2" />
                   )}
-                  {isSubmitting ? "Sending..." : t("sendMessageBtn")}
+                  {isSubmitting ? t("sending") : t("sendMessageBtn")}
                 </button>
               </form>
             </div>
