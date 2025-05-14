@@ -4,9 +4,18 @@ import Image from "next/image"
 import AnimatedSection from "./animated-section"
 import { ChevronDown } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import RotatingText from "./rotating-text"
 
 export default function Hero() {
   const { t } = useLanguage()
+  
+  // Array of rotating texts for the animation
+  const rotatingTexts = [
+    t("developer"),
+    t("designer"),
+    t("creator"),
+    t("innovator")
+  ]
   
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -41,8 +50,15 @@ export default function Hero() {
       <div className="container mx-auto px-4 md:px-6 z-10 text-center relative">
         <AnimatedSection direction="down" delay={300}>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight text-shadow">
-            <span className="text-glow">{t("welcome")}</span> {t("welcomeToPortfolio")}
+            {t("welcomeToPortfolio")}
           </h1>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 flex items-center justify-center flex-wrap gap-2 min-h-[2em] py-2" style={{ lineHeight: 1.5 }}>
+            <span className="text-glow mr-2 whitespace-nowrap">{t("iAmA")}</span>
+            <RotatingText 
+              texts={rotatingTexts} 
+              className="text-glow bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 drop-shadow-lg font-bold"
+            />
+          </h2>
         </AnimatedSection>
 
         <AnimatedSection delay={600}>
