@@ -75,8 +75,8 @@ export const translations: { [lang: string]: TranslationDict } = {
     // Hero
     welcome: "",
     welcomeToPortfolio: "Welcome to the Future of your business",
-    heroDescription: "I create beautiful, functional websites that help businesses grow and stand out in the digital landscape",
-    iAmA: "I am a",
+    heroDescription: "I create beautiful, functional websites that help businesses/startups grow and stand out in the digital landscape.",
+    iAmA: "Your",
     getInTouch: "Get in Touch",
     viewMyWork: "View My Work",
     // Rotating text options
@@ -128,8 +128,15 @@ export const translations: { [lang: string]: TranslationDict } = {
     // Intro section
     introduction: "Introduction",
     whatIDo: "What I Do & How I Can Help",
-    discoverTitle: "Find out how I can make your online business come true",
+    discoverTitle: "Find out how I can make your online business/startup happen",
     speechEnabled: "Text-to-speech is enabled. Subtitles will be spoken aloud.",
+
+    // Language selector dropdown
+    languageSelector: "Select Language",
+    english: "English",
+    bulgarian: "Bulgarian",
+    subtitles: "Subtitles",
+    audio: "Audio",
 
     // About section
     aboutMe: "About Me",
@@ -574,10 +581,11 @@ export const translations: { [lang: string]: TranslationDict } = {
     // Hero
     welcome: "",
     welcomeToPortfolio: "Добре дошли в Бъдещето на вашия бизнес",
-    heroDescription: "Създавам красиви, функционални уебсайтове, които помагат на бизнесите да растат и да се открояват в дигиталния пейзаж",
-    iAmA: "Аз съм",
+    heroDescription: "Създавам красиви, функционални уебсайтове, които помагат на бизнесите/стартъпите да растат и да се открояват в дигиталния пейзаж",
+    iAmA: "Вашият",
     getInTouch: "Свържете се с мен",
     viewMyWork: "Вижте моята работа",
+
     // Rotating text options
     developer: "Разработчик",
     designer: "Дизайнер", 
@@ -627,8 +635,15 @@ export const translations: { [lang: string]: TranslationDict } = {
     // Intro section
     introduction: "Въведение",
     whatIDo: "Какво правя и как мога да помогна",
-    discoverTitle: "Разберете как мога да осъществя вашия онлайн бизнес",
+    discoverTitle: "Разберете как мога да осъществя вашия онлайн бизнес/стартъп",
     speechEnabled: "Текстът към реч е активиран. Субтитрите ще бъдат изговаряни на глас.",
+
+    //Language selector dropdown
+    languageSelector: "Изберете език",
+    english: "Английски",
+    bulgarian: "Български",
+    subtitles: "Субтитри",
+    audio: "Аудио",
 
     // About section
     aboutMe: "За мен",
