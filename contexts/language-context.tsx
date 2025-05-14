@@ -79,11 +79,12 @@ export const translations: { [lang: string]: TranslationDict } = {
     iAmA: "Your",
     getInTouch: "Get in Touch",
     viewMyWork: "View My Work",
+
     // Rotating text options
-    developer: "Developer",
-    designer: "Designer", 
-    creator: "Creator",
-    innovator: "Innovator",
+    developer: "DEVELOPER",
+    designer: "DESIGNER",
+    creator: "CREATOR",
+    innovator: "INNOVATOR",
     contactDescription: "If you have any questions or would like to discuss a project, please don't hesitate to contact me. I'm here to help you achieve your goals and make your online presence shine.",
     contactInformation: "Contact Information",
     connectWithMe: "Connect with me",
@@ -131,12 +132,17 @@ export const translations: { [lang: string]: TranslationDict } = {
     discoverTitle: "Find out how I can make your online business/startup happen",
     speechEnabled: "Text-to-speech is enabled. Subtitles will be spoken aloud.",
 
-    // Language selector dropdown
+    // Language selector dropdown (video)
     languageSelector: "Select Language",
     english: "English",
     bulgarian: "Bulgarian",
     subtitles: "Subtitles",
     audio: "Audio",
+
+    //Language selector dropdown (profile)
+    selectLanguage: "Select Language",
+    englishProfile: "English",
+    bulgarianProfile: "Bulgarian",
 
     // About section
     aboutMe: "About Me",
@@ -587,10 +593,10 @@ export const translations: { [lang: string]: TranslationDict } = {
     viewMyWork: "Вижте моята работа",
 
     // Rotating text options
-    developer: "Разработчик",
-    designer: "Дизайнер", 
-    creator: "Създател",
-    innovator: "Иноватор",
+    developer: "РАЗРАБОТЧИК",
+    designer: "ДИЗАЙНЕР",
+    creator: "СЪЗДАТЕЛ",
+    innovator: "ИНОВАТОР",
     contactDescription: "Ако имате въпроси или искате да обсъдите проект, моля, не се колебайте да се свържете с мен. Ще бъда тук, за да помогна да постигнете вашите цели и да направите вашето онлайн присъствие блестящо.",
     contactInformation: "Информация за контакт",
     connectWithMe: "Свържете се с мен",
@@ -638,12 +644,17 @@ export const translations: { [lang: string]: TranslationDict } = {
     discoverTitle: "Разберете как мога да осъществя вашия онлайн бизнес/стартъп",
     speechEnabled: "Текстът към реч е активиран. Субтитрите ще бъдат изговаряни на глас.",
 
-    //Language selector dropdown
+    //Language selector dropdown (video)
     languageSelector: "Изберете език",
     english: "Английски",
     bulgarian: "Български",
     subtitles: "Субтитри",
     audio: "Аудио",
+
+    //Language selector dropdown (profile)
+    selectLanguage: "Изберете език",
+    englishProfile: "Английски",
+    bulgarianProfile: "Български",
 
     // About section
     aboutMe: "За мен",
