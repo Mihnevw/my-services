@@ -29,6 +29,17 @@ export default function SecurityForm({ email }: SecurityFormProps) {
   const router = useRouter()
   const { t } = useLanguage()
 
+  // Parse security tips from JSON string
+  const securityTips = (() => {
+    try {
+      const tipsString = t("securityTips");
+      return JSON.parse(tipsString);
+    } catch (error) {
+      console.error("Error parsing security tips:", error);
+      return [];
+    }
+  })();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -285,11 +296,9 @@ export default function SecurityForm({ email }: SecurityFormProps) {
             <div>
               <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300">{t("keepAccountSecure")}</h4>
               <ul className="mt-3 text-sm text-blue-700 dark:text-blue-400 space-y-2">
-                <li>• {t("securityTips")}</li>
-                <li>• {t("securityTips")}</li>
-                <li>• {t("securityTips")}</li>
-                <li>• {t("securityTips")}</li>
-                <li>• {t("securityTips")}</li>
+                {securityTips.map((tip: string, index: number) => (
+                  <li key={index}>• {tip}</li>
+                ))}
               </ul>
             </div>
           </div>

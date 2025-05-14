@@ -145,7 +145,7 @@ export default function LoginForm({ onRegisterClick, onForgotPasswordClick }: Lo
               className={`form-input w-full pl-10 py-2 border ${
                 errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
-              placeholder="your.email@example.com"
+              placeholder={t("emailPlaceholder")}
             />
           </div>
           {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
