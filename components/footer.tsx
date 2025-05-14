@@ -25,17 +25,17 @@ export default function Footer() {
     { name: t("webDev"), href: "/services" },
     { name: t("seoOptimization"), href: "/services" },
     { name: t("maintenance"), href: "/services" },
-    { name: "E-commerce", href: "/services" },
-    { name: "Branding", href: "/services" },
+    { name: t("eComerce"), href: "/services" },
+    { name: t("branding"), href: "/services" },
   ]
 
   const resourceItems = [
     { name: t("blog"), href: "/" },
-    { name: "Case Studies", href: "/" },
-    { name: "Portfolio", href: "/" },
+    { name: t("caseStudies"), href: "/" },
+    { name: t("portfolio"), href: "/" },
     { name: t("testimonials"), href: "/" },
-    { name: "FAQ", href: "/" },
-    { name: "Support", href: "/" },
+    { name: t("faq"), href: "/" },
+    { name: t("support"), href: "/" },
   ]
 
   return (

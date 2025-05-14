@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import analytics from '../lib/analytics'
+import SEOOptimization from "./seo-optimization"
 
 interface ClientProvidersProps {
   children: ReactNode
@@ -17,6 +18,8 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
   }, [path])
 
   return (
-    <>{children}</>
+    <SEOOptimization>
+      {children}
+    </SEOOptimization>
   )
 } 

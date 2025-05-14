@@ -18,15 +18,21 @@ export default function Hero() {
   ]
   
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section 
+      id="home" 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-label="Hero section"
+    >
       {/* Background with gradient overlay */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0" aria-hidden="true">
         <Image
           src="/hero.png"
-          alt="Hero background"
+          alt="Professional web development services backdrop"
           fill
           priority
           className="object-cover"
+          sizes="100vw"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/70 to-indigo-900/90 dark:from-blue-900/80 dark:to-gray-900/95 mix-blend-multiply" />
 
@@ -49,10 +55,10 @@ export default function Hero() {
 
       <div className="container mx-auto px-4 md:px-6 z-10 text-center relative">
         <AnimatedSection direction="down" delay={300}>
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight text-shadow">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight text-shadow-2xl">
             {t("welcomeToPortfolio")}
           </h1>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 flex items-center justify-center flex-wrap gap-2 min-h-[2em] py-2" style={{ lineHeight: 1.5 }}>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-12 flex items-center justify-center flex-wrap gap-2 min-h-[2em] py-2 text-shadow-2xl" style={{ lineHeight: 1.5 }}>
             <span className="text-glow mr-2 whitespace-nowrap">{t("iAmA")}</span>
             <RotatingText 
               texts={rotatingTexts} 
@@ -62,7 +68,7 @@ export default function Hero() {
         </AnimatedSection>
 
         <AnimatedSection delay={600}>
-          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-8">
+          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-8 text-shadow-lg">
             {t("heroDescription")}
           </p>
         </AnimatedSection>
@@ -71,13 +77,16 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
             <a
               href="contact"
-              className="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
+              className="btn-primary text-white font-medium py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-lg text-shadow-lg"
+              aria-label="Get in touch"
+              rel="nofollow"
             >
               {t("getInTouch")}
             </a>
             <a
               href="/projects"
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40 text-lg"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 border border-white/20 hover:border-white/40 text-lg text-shadow-lg"
+              aria-label="View my work"
             >
               {t("viewMyWork")}
             </a>
@@ -86,7 +95,7 @@ export default function Hero() {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
-          <a href="/about" className="text-white/80 hover:text-white transition-colors">
+          <a href="/about" className="text-white/80 hover:text-white transition-colors text-shadow-lg" aria-label="Scroll down to about section">
             <ChevronDown className="h-8 w-8" />
             <span className="sr-only">Scroll down</span>
           </a>
@@ -94,7 +103,7 @@ export default function Hero() {
       </div>
 
       {/* Wave divider */}
-      <div className="custom-shape-divider-bottom-1">
+      <div className="custom-shape-divider-bottom-1" aria-hidden="true">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"

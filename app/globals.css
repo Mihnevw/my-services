@@ -350,6 +350,22 @@ html {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.text-shadow-2xl {
+  text-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dark .text-shadow-2xl {
+  text-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
 .text-glow {
   text-shadow: 0 0 10px rgba(var(--theme-primary-rgb, 79, 70, 229), 0.5);
 }

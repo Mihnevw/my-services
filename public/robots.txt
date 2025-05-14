@@ -1,0 +1,11 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://mihnev.com/sitemap.xml
+
+# Disallow certain paths
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/ 
