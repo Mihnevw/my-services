@@ -1,6 +1,6 @@
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
-import Pricing from "@/components/pricing";
+//import Pricing from "@/components/pricing";
 import Testimonials from "@/components/testimonials";
 import BlogPreview from "@/components/BlogPreview";
 import Footer from "@/components/footer";
