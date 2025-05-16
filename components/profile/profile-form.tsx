@@ -200,7 +200,18 @@ export default function ProfileForm({ userData }: ProfileFormProps) {
                 <div className="flex items-center space-x-8">
                     <div className="relative group">
                         <div className="relative h-32 w-32 rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-lg">
-                            <Image src={profileImage || "/placeholder.svg"} alt="Profile" fill className="object-cover" />
+                            <Image 
+                                src={profileImage || "/placeholder.svg"} 
+                                alt="Profile" 
+                                fill 
+                                className="object-cover" 
+                                onError={(e) => {
+                                    // If the image fails to load, fall back to placeholder
+                                    const target = e.target as HTMLImageElement;
+                                    target.onerror = null; // Prevent infinite error loop
+                                    target.src = "/placeholder.svg";
+                                }}
+                            />
                             {isUploading && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                                     <Loader2 className="h-8 w-8 text-white animate-spin" />

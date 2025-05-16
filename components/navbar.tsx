@@ -33,14 +33,14 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { name: t("home"), href: "/" },
-    { name: t("about"), href: "/about" },
-    { name: t("services"), href: "/services" },
-    { name: t("projects"), href: "/projects" },
-    { name: t("pricing"), href: "/pricing" },
-    { name: t("testimonials"), href: "/testimonials" },
-    { name: t("blog"), href: "/blog" },
-    { name: t("contact"), href: "/contact" },
+    { name: t("home"), href: "/", prefetch: true },
+    { name: t("about"), href: "/about", prefetch: true },
+    { name: t("services"), href: "/services", prefetch: false },
+    { name: t("projects"), href: "/projects", prefetch: false },
+    { name: t("pricing"), href: "/pricing", prefetch: false },
+    { name: t("testimonials"), href: "/testimonials", prefetch: false },
+    { name: t("blog"), href: "/blog", prefetch: true },
+    { name: t("contact"), href: "/contact", prefetch: false },
   ]
 
   return (
@@ -66,6 +66,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
+                prefetch={link.prefetch}
                 className="text-gray-400 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
               >
                 {link.name}
@@ -94,6 +95,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
+                  prefetch={link.prefetch}
                   className="text-gray-400 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >

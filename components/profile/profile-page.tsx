@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProfileForm from "./profile-form"
 import SecurityForm from "./security-form"
@@ -21,13 +21,16 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
   const { currentColor } = useThemeColor()
   const { user } = useAuth()
   const { t } = useLanguage()
+  const [imageAvailable, setImageAvailable] = useState(true)
 
-  // Use actual user data from Supabase
+  // Use actual user data from Supabase with fallback for avatar URL
   const userData = {
     name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || "User",
     email: user?.email || "",
     bio: user?.user_metadata?.bio || "",
-    profileImage: user?.user_metadata?.avatar_url || "/placeholder.svg?height=200&width=200",
+    profileImage: imageAvailable && user?.user_metadata?.avatar_url 
+      ? user.user_metadata.avatar_url 
+      : "/placeholder.svg?height=200&width=200",
     phone: user?.user_metadata?.phone || "",
     location: user?.user_metadata?.location || "",
     socialLinks: {
@@ -43,6 +46,12 @@ export default function ProfilePage({ onClose }: ProfilePageProps) {
       darkMode: user?.user_metadata?.dark_mode ?? false,
     },
   }
+
+  // Simplified approach - skip validation and rely on image onError handling instead
+  useEffect(() => {
+    // Skip validation - we'll rely on the Image component's onError handler
+    // This avoids CSP connect-src issues with external domains
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

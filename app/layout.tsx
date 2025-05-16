@@ -11,8 +11,15 @@ import { ReactNode } from "react";
 import ClientProviders from "../components/ClientProviders";
 import { LanguageProvider } from "@/contexts/language-context";
 
-
-const inter = Inter({ subsets: ["latin"], display: 'swap' })
+// Optimize font loading - only load Latin subset
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+  weight: ['400', '500', '600', '700'], // Only preload essential weights
+  fallback: ['system-ui', 'sans-serif'],
+  adjustFontFallback: true
+})
 
 export const metadata: Metadata = {
   title: {
@@ -91,6 +98,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+        {/* DNS prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        {/* Preconnect for critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>

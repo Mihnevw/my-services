@@ -10,9 +10,9 @@ interface SEOOptimizationProps {
 export default function SEOOptimization({ children }: SEOOptimizationProps) {
   const pathname = usePathname()
   
-  // Preconnect to external domains to improve performance
+  // Performance optimization and SEO improvements
   useEffect(() => {
-    // Add preconnect links
+    // Add preconnect links for faster resource loading
     const preconnectLinks = [
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
@@ -26,6 +26,20 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
       if (link.crossOrigin) {
         linkElement.crossOrigin = link.crossOrigin
       }
+      document.head.appendChild(linkElement)
+    })
+    
+    // Preload critical assets
+    const preloadAssets = [
+      { href: '/favicon.png', as: 'image' },
+      // Add other critical assets that should be preloaded
+    ]
+    
+    preloadAssets.forEach(asset => {
+      const linkElement = document.createElement('link')
+      linkElement.rel = 'preload'
+      linkElement.href = asset.href
+      linkElement.as = asset.as
       document.head.appendChild(linkElement)
     })
     
@@ -99,13 +113,58 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
     `
     document.head.appendChild(style)
     
+    // Enable instant page transitions with quicklink
+    const enableQuickLink = () => {
+      // Observe all anchor links
+      const links = document.querySelectorAll('a')
+      links.forEach(link => {
+        // Only prefetch same-origin links and not external URLs
+        if (
+          link.href && 
+          link.href.startsWith(window.location.origin) && 
+          !link.href.includes('#') &&
+          !link.hasAttribute('data-no-prefetch')
+        ) {
+          // Prefetch on hover or touchstart
+          link.addEventListener('mouseenter', () => {
+            const prefetchLink = document.createElement('link')
+            prefetchLink.rel = 'prefetch'
+            prefetchLink.href = link.href
+            prefetchLink.as = 'document'
+            document.head.appendChild(prefetchLink)
+          }, { once: true })
+        }
+      })
+    }
+    
+    // Initialize link prefetching
+    if (document.readyState === 'complete') {
+      enableQuickLink()
+    } else {
+      window.addEventListener('load', enableQuickLink)
+    }
+    
     // Cleanup function
     return () => {
-      document.head.removeChild(scriptElement)
-      document.head.removeChild(style)
+      if (document.head.contains(scriptElement)) {
+        document.head.removeChild(scriptElement)
+      }
+      if (document.head.contains(style)) {
+        document.head.removeChild(style)
+      }
+      
       preconnectLinks.forEach(link => {
         const linkElement = document.querySelector(`link[rel="${link.rel}"][href="${link.href}"]`)
-        if (linkElement) document.head.removeChild(linkElement)
+        if (linkElement && document.head.contains(linkElement)) {
+          document.head.removeChild(linkElement)
+        }
+      })
+      
+      preloadAssets.forEach(asset => {
+        const linkElement = document.querySelector(`link[rel="preload"][href="${asset.href}"]`)
+        if (linkElement && document.head.contains(linkElement)) {
+          document.head.removeChild(linkElement)
+        }
       })
     }
   }, [pathname])

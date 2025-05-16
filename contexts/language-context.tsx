@@ -67,6 +67,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     logout: "Logout",
     profile: "Profile",
     signOut: "Sign Out",
+    signOutConfirm: "Are you sure you want to sign out?",
     privacyPolicy: "Privacy Policy",
     termsOfService: "Terms of Service",
     cookiePolicy: "Cookie Policy",
