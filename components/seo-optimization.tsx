@@ -7,26 +7,34 @@ interface SEOOptimizationProps {
   children: React.ReactNode
 }
 
+// Define interface for preconnect links
+interface PreconnectLink {
+  rel: string;
+  href: string;
+  crossOrigin?: string;
+}
+
 export default function SEOOptimization({ children }: SEOOptimizationProps) {
   const pathname = usePathname()
   
   // Performance optimization and SEO improvements
   useEffect(() => {
-    // Add preconnect links for faster resource loading
-    const preconnectLinks = [
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+    // Add preconnect links for faster resource loading only if they don't already exist
+    const preconnectLinks: PreconnectLink[] = [
       { rel: 'preconnect', href: 'https://cdn.jsdelivr.net' }
     ]
     
     preconnectLinks.forEach(link => {
-      const linkElement = document.createElement('link')
-      linkElement.rel = link.rel
-      linkElement.href = link.href
-      if (link.crossOrigin) {
-        linkElement.crossOrigin = link.crossOrigin
+      // Check if the link already exists before adding
+      if (!document.querySelector(`link[rel="${link.rel}"][href="${link.href}"]`)) {
+        const linkElement = document.createElement('link')
+        linkElement.rel = link.rel
+        linkElement.href = link.href
+        if (link.crossOrigin) {
+          linkElement.crossOrigin = link.crossOrigin
+        }
+        document.head.appendChild(linkElement)
       }
-      document.head.appendChild(linkElement)
     })
     
     // Preload critical assets
@@ -36,11 +44,13 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
     ]
     
     preloadAssets.forEach(asset => {
-      const linkElement = document.createElement('link')
-      linkElement.rel = 'preload'
-      linkElement.href = asset.href
-      linkElement.as = asset.as
-      document.head.appendChild(linkElement)
+      if (!document.querySelector(`link[rel="preload"][href="${asset.href}"]`)) {
+        const linkElement = document.createElement('link')
+        linkElement.rel = 'preload'
+        linkElement.href = asset.href
+        linkElement.as = asset.as
+        document.head.appendChild(linkElement)
+      }
     })
     
     // Add structured data for current page
@@ -56,6 +66,14 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
         "url": "https://mihnev.com"
       }
     }
+    
+    // Remove any existing structured data script before adding new one
+    const existingScripts = document.querySelectorAll('script[type="application/ld+json"]')
+    existingScripts.forEach(script => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script)
+      }
+    })
     
     const scriptElement = document.createElement('script')
     scriptElement.type = 'application/ld+json'
@@ -104,14 +122,18 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
     }
     
     // Add focus outline for keyboard navigation - accessibility improvement
-    const style = document.createElement('style')
-    style.innerHTML = `
-      *:focus-visible {
-        outline: 2px solid var(--theme-primary, #3b82f6);
-        outline-offset: 2px;
-      }
-    `
-    document.head.appendChild(style)
+    // Only add if it doesn't exist already
+    if (!document.querySelector('style[data-focus-style]')) {
+      const style = document.createElement('style')
+      style.setAttribute('data-focus-style', 'true')
+      style.innerHTML = `
+        *:focus-visible {
+          outline: 2px solid var(--theme-primary, #3b82f6);
+          outline-offset: 2px;
+        }
+      `
+      document.head.appendChild(style)
+    }
     
     // Enable instant page transitions with quicklink
     const enableQuickLink = () => {
@@ -127,11 +149,14 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
         ) {
           // Prefetch on hover or touchstart
           link.addEventListener('mouseenter', () => {
-            const prefetchLink = document.createElement('link')
-            prefetchLink.rel = 'prefetch'
-            prefetchLink.href = link.href
-            prefetchLink.as = 'document'
-            document.head.appendChild(prefetchLink)
+            // Check if prefetch link already exists
+            if (!document.querySelector(`link[rel="prefetch"][href="${link.href}"]`)) {
+              const prefetchLink = document.createElement('link')
+              prefetchLink.rel = 'prefetch'
+              prefetchLink.href = link.href
+              prefetchLink.as = 'document'
+              document.head.appendChild(prefetchLink)
+            }
           }, { once: true })
         }
       })
@@ -146,13 +171,7 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
     
     // Cleanup function
     return () => {
-      if (document.head.contains(scriptElement)) {
-        document.head.removeChild(scriptElement)
-      }
-      if (document.head.contains(style)) {
-        document.head.removeChild(style)
-      }
-      
+      // Clean up only the elements we've added in this effect
       preconnectLinks.forEach(link => {
         const linkElement = document.querySelector(`link[rel="${link.rel}"][href="${link.href}"]`)
         if (linkElement && document.head.contains(linkElement)) {
@@ -164,6 +183,18 @@ export default function SEOOptimization({ children }: SEOOptimizationProps) {
         const linkElement = document.querySelector(`link[rel="preload"][href="${asset.href}"]`)
         if (linkElement && document.head.contains(linkElement)) {
           document.head.removeChild(linkElement)
+        }
+      })
+      
+      const styleElement = document.querySelector('style[data-focus-style="true"]')
+      if (styleElement && document.head.contains(styleElement)) {
+        document.head.removeChild(styleElement)
+      }
+      
+      const scriptElements = document.querySelectorAll('script[type="application/ld+json"]')
+      scriptElements.forEach(script => {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script)
         }
       })
     }

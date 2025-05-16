@@ -54,10 +54,10 @@ export default function AuthModal({ isOpen, onClose, initialView = "login" }: Au
 
       {/* Modal */}
       <div className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-        {/* Close button */}
+        {/* Close button - improved for mobile */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           aria-label="Close"
         >
           <X size={20} />
