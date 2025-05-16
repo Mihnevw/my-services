@@ -3,11 +3,23 @@
 import { Check } from "lucide-react"
 import AnimatedSection from "./animated-section"
 import { useLanguage } from "@/contexts/language-context"
+import { useStripeCheckout } from "@/hooks/useStripeCheckout"
+import { useState } from "react"
 
 export default function Pricing() {
   const { t } = useLanguage();
+  const { redirectToCheckout, isLoading, error } = useStripeCheckout();
+  const [processingPlan, setProcessingPlan] = useState<string | null>(null);
+
+  const handleCheckout = async (plan: 'basic' | 'standard' | 'premium') => {
+    setProcessingPlan(plan);
+    await redirectToCheckout(plan);
+    setProcessingPlan(null);
+  };
+
   const plans = [
     {
+      id: 'basic',
       name: t("planBasicName"),
       price: t("PlanPriceBasic"),
       description: t("planBasicDesc"),
@@ -22,6 +34,7 @@ export default function Pricing() {
       ctaText: t("planBasicCTA"),
     },
     {
+      id: 'standard',
       name: t("planStandardName"),
       price: t("PlanPriceStandard"),
       description: t("planStandardDesc"),
@@ -38,6 +51,7 @@ export default function Pricing() {
       ctaText: t("planStandardCTA"),
     },
     {
+      id: 'premium',
       name: t("planPremiumName"),
       price: t("PlanPricePremium"),
       description: t("planPremiumDesc"),
@@ -72,6 +86,11 @@ export default function Pricing() {
             <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 gradient-text">{t("pricingSubHeader")}</h2>
             <div className="h-1 w-20 bg-gradient-1 mx-auto rounded-full mb-6"></div>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">{t("pricingDescription")}</p>
+            {error && (
+              <div className="mt-4 text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-md max-w-md mx-auto">
+                {error}
+              </div>
+            )}
           </div>
         </AnimatedSection>
 
@@ -103,13 +122,15 @@ export default function Pricing() {
                     ))}
                   </ul>
                   <button
+                    onClick={() => handleCheckout(plan.id as 'basic' | 'standard' | 'premium')}
+                    disabled={isLoading}
                     className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
                       plan.highlighted
                         ? "btn-primary text-white shadow-lg"
                         : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-900 dark:text-white hover:shadow-md"
-                    }`}
+                    } ${isLoading && processingPlan === plan.id ? "opacity-70 cursor-not-allowed" : ""}`}
                   >
-                    {plan.ctaText}
+                    {isLoading && processingPlan === plan.id ? "Processing..." : plan.ctaText}
                   </button>
                 </div>
               </div>

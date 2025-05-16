@@ -27,11 +27,12 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self';",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://js.stripe.com;",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
               "font-src 'self' data: https://fonts.gstatic.com;",
               "img-src 'self' data: https://images.unsplash.com https://platform-lookaside.fbsbx.com https://lh3.googleusercontent.com https://avatars.githubusercontent.com;",
-              "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.supabase.co https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com https://avatars.githubusercontent.com;"
+              "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://*.supabase.co https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com https://avatars.githubusercontent.com https://api.stripe.com;",
+              "frame-src 'self' https://js.stripe.com https://hooks.stripe.com;"
             ].join(' ')
           }
         ]
