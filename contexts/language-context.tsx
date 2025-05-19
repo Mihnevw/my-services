@@ -72,6 +72,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     termsOfService: "Terms of Service",
     cookiePolicy: "Cookie Policy",
     allRightsReserved: "All rights reserved",
+    menu: "Menu",
 
     // Hero
     welcome: "",
@@ -132,7 +133,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     whatIDo: "What I Do & How I Can Help",
     discoverTitle: "Find out how I can make your online business/startup happen",
     speechEnabled: "Text-to-speech is enabled. Subtitles will be spoken aloud.",
-
+    
     // Language selector dropdown (video)
     languageSelector: "Select Language",
     english: "English",
@@ -249,10 +250,10 @@ export const translations: { [lang: string]: TranslationDict } = {
     projectsDescription: "Take a look at some of my recent work and the problems I've solved",
     livePreview: "Live Preview",
     sourceCode: "Source Code",
-    descriptionProjects1: "A modern web application for managing hairdresser salon appointments using Google Calendar integration.",
-    descriptionProjects2: "A modern web application for exchanging items (clothes, equipment, books, etc.) with a focus on sustainability and zero-waste principles.",
-    descriptionProjects3: "DeliDish Is a restaurant web application built with React.js and Bootstrap, providing a modern and responsive look. It includes a dynamic menu that displays delicious food and uses React Router for efficient navigation. Authentication is implemented with Login and Register functionality, and after a successful login, the user remains logged in even with a strict refresh. Navigation changes dynamically depending on the user's status.",
-    descriptionProjects4: "This portfolio is not just a website, but an interactive showcase of my skills and projects. All projects are dynamically loaded directly from GitHub, ensuring always up-to-date information. A notification system has been added to the Skills section, which shows the latest news on the specific notification. With an integrated Back-end, the Contact Us section allows clients to easily contact me. The design is modern, convenient and optimized for all devices, and the navigation is intuitive to make the review enjoyable and efficient.",
+    descriptionProjects1: "A clean and modern website, custom-built for our client – featuring a convenient online booking system that saves time and eliminates the need to visit in person.",
+    descriptionProjects2: "Recircle is a web application for exchanging items (clothes, equipment, books, and more), which is my personal project built entirely from scratch. Its main goal is to support sustainability and promote zero-waste principles.",
+    descriptionProjects3: "Rosario is a web application for restaurants featuring a modern and responsive design. It offers easy menu browsing, fast and intuitive navigation, and an option to make online dinner reservations.",
+    descriptionProjects4: "This portfolio is built with the client in mind – modern, intuitive, and fully responsive. Projects are loaded directly from GitHub, and the integrated contact form makes it easy to get in touch.",
 
     // Project items
     ecommerce: "E-commerce Website",
@@ -584,6 +585,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     termsOfService: "Общи условия",
     cookiePolicy: "Политика за бисквитки",
     allRightsReserved: "Всички права запазени",
+    menu: "Меню",
 
     // Hero
     welcome: "",
@@ -762,10 +764,10 @@ export const translations: { [lang: string]: TranslationDict } = {
     projectsDescription: "Разгледайте някои от моите скорошни проекти и проблемите, които съм решил",
     livePreview: "Преглед",
     sourceCode: "Изходен код",
-    descriptionProjects1: "Модерно уеб приложение за управление на срещи във фризьорски салон с интеграция на Google Calendar.",
-    descriptionProjects2: "Модерно уеб приложение за обмен на предмети (дрехи, оборудване, книги и т.н.) с фокус върху устойчивостта и принципите за нулев отпадък.",
-    descriptionProjects3: "DeliDish е ресторантско уеб приложение, изградено с React.js и Bootstrap, предоставящо модерен и отзивчив изглед. Включва динамично меню, което показва вкусна храна и използва React Router за ефективна навигация. Удостоверяването е имплементирано с функционалност за вход и регистрация, и след успешен вход потребителят остава влезъл дори при строго опресняване. Навигацията се променя динамично в зависимост от статуса на потребителя.",
-    descriptionProjects4: "Това портфолио не е просто уебсайт, а интерактивна витрина на моите умения и проекти. Всички проекти се зареждат динамично директно от GitHub, осигурявайки винаги актуална информация. В секцията Умения е добавена система за известия, която показва най-новите новини за конкретното известие. С интегриран Back-end, секцията Свържете се с нас позволява на клиентите лесно да се свържат с мен. Дизайнът е модерен, удобен и оптимизиран за всички устройства, а навигацията е интуитивна, за да направи прегледа приятен и ефективен.",
+    descriptionProjects1: "Изчистен и модерен уебсайт, изграден по поръчка за наш клиент – с удобна система за онлайн записвания, която спестява време и елиминира нуждата от посещение на място.",
+    descriptionProjects2: "Recircle е уеб приложение за обмен на предмети (дрехи, оборудване, книги и други), което е мой личен проект, изграден изцяло от нулата. Основната му цел е да подкрепя устойчивостта и да насърчава принципите на нулев отпадък.",
+    descriptionProjects3: "Rosario е уеб приложение за ресторанти с модерен и адаптивен дизайн. Позволява лесно разглеждане на менюто, бърза и интуитивна навигация, както и опция за онлайн резервация на вечери.",
+    descriptionProjects4: "Това портфолио е създадено с мисъл за клиента – модерно, интуитивно и адаптивно. Проектите се зареждат директно от GitHub, а вградената форма за контакт улеснява връзката с мен.",
 
     // Project items
     ecommerce: "Уебсайт за електронна търговия",

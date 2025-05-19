@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Menu, X } from "lucide-react"
-import ThemeToggle from "@/components/theme-toggle"
-import ThemeColorPicker from "@/components/theme-color-picker"
-import AuthButtons from "@/components/auth/auth-buttons"
-import LanguageSelector from "@/components/LanguageSelector"
-import { useLanguage } from "@/contexts/language-context"
-import { useOnClickOutside } from "../hooks/use-on-click-outside"
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import ThemeToggle from "@/components/theme-toggle";
+import ThemeColorPicker from "@/components/theme-color-picker";
+import AuthButtons from "@/components/auth/auth-buttons";
+import LanguageSelector from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/language-context";
 
 export default function Navbar() {
   const { t } = useLanguage()  // Use the translation function from language context
@@ -29,12 +28,12 @@ export default function Navbar() {
   // Close menu when clicking outside - only active after mounting
   useEffect(() => {
     if (!isMounted) return;
-    
+
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (
-        menuRef.current && 
+        menuRef.current &&
         !menuRef.current.contains(event.target as Node) &&
-        menuButtonRef.current && 
+        menuButtonRef.current &&
         !menuButtonRef.current.contains(event.target as Node)
       ) {
         setIsMenuOpen(false)
@@ -43,7 +42,7 @@ export default function Navbar() {
 
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("touchstart", handleClickOutside);
-    
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
@@ -52,7 +51,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isMounted) return;
-    
+
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setIsScrolled(true)
@@ -70,14 +69,14 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll)
     window.addEventListener("keydown", handleKeyDown)
-    
+
     // Prevent scrolling when menu is open
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'auto'
     }
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll)
       window.removeEventListener("keydown", handleKeyDown)
@@ -112,6 +111,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white dark:bg-gray-900 shadow-md py-2" : "bg-transparent py-4"
         }`}
+      suppressHydrationWarning
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
@@ -147,10 +147,10 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Navigation Toggle */}
-          <button 
+          <button
             ref={menuButtonRef}
             className={`${menuButtonClass} ${menuButtonEnhancedClass}`}
-            onClick={toggleMenu} 
+            onClick={toggleMenu}
             aria-label="Toggle menu"
             {...(isMounted ? {
               'aria-expanded': isMenuOpen,
@@ -163,19 +163,26 @@ export default function Navbar() {
 
         {/* Mobile Navigation Menu - Full Screen Overlay (only rendered after client-side hydration) */}
         {isMounted && (
-          <div 
+          <div
             id="mobile-menu"
-            className={`fixed inset-0 bg-white dark:bg-gray-900 z-50 transition-all duration-300 md:hidden ${
-              isMenuOpen 
-                ? "opacity-100 visible" 
+            className={`fixed inset-0 bg-white dark:bg-gray-900 z-50 transition-all duration-300 md:hidden ${isMenuOpen
+                ? "opacity-100 visible"
                 : "opacity-0 invisible"
-            }`}
+              }`}
             aria-hidden={!isMenuOpen}
           >
-            <div 
+            <div
               ref={menuRef}
               className="flex flex-col h-full max-h-screen overflow-y-auto py-20 px-6"
             >
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                aria-label="Close menu"
+              >
+                <X size={24} />
+              </button>
+
               <div className="flex flex-col space-y-6 mt-10">
                 {navLinks.map((link) => (
                   <Link
@@ -195,19 +202,17 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-              
+
               <div className="mt-auto pt-8 border-t border-gray-200 dark:border-gray-700">
-                <div className="grid grid-cols-12 gap-4 items-center">
-                  <div className="col-span-5">
-                    <LanguageSelector />
+                <div className="flex flex-wrap items-center justify-between gap-4 px-2">
+                  <div className="w-full md:w-auto mb-2">
+                    <LanguageSelector className="w-full" />
                   </div>
-                  <div className="col-span-2 flex justify-center">
+                  <div className="flex items-center space-x-4 mx-auto">
                     <ThemeToggle />
-                  </div>
-                  <div className="col-span-2 flex justify-center">
                     <ThemeColorPicker />
                   </div>
-                  <div className="col-span-3 flex justify-end">
+                  <div className="w-full md:w-auto flex justify-center mt-4">
                     <AuthButtons />
                   </div>
                 </div>
