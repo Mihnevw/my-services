@@ -11,14 +11,14 @@ export async function POST(request: Request) {
   try {
     // Get the plan from the request body
     const { plan } = await request.json();
-    
+
     // Get the price ID based on the selected plan
-    const priceId = 
+    const priceId =
       plan === 'basic' ? STRIPE_PRICE_IDS.basic :
-      plan === 'standard' ? STRIPE_PRICE_IDS.standard :
-      plan === 'premium' ? STRIPE_PRICE_IDS.premium :
-      null;
-    
+        plan === 'standard' ? STRIPE_PRICE_IDS.standard :
+          plan === 'premium' ? STRIPE_PRICE_IDS.premium :
+            null;
+
     if (!priceId) {
       return NextResponse.json({ error: 'Invalid plan selected' }, { status: 400 });
     }
