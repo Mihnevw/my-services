@@ -93,13 +93,15 @@ export default function Hero() {
           </div>
         </AnimatedSection>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
+        {/* Scroll indicator
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce-slow z-10">
           <a href="/about" className="text-white/80 hover:text-white transition-colors text-shadow-lg" aria-label="Scroll down to about section">
-            <ChevronDown className="h-8 w-8" />
+            <ChevronDown className="h-7 w-7" />
             <span className="sr-only">Scroll down</span>
           </a>
         </div>
+        */}
+        
       </div>
 
       {/* Wave divider */}
