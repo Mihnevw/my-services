@@ -1,8 +1,9 @@
 import Navbar from "@/components/navbar"
 import Contact from "@/components/contact"
 import Footer from "@/components/footer"
+import { type Metadata } from "next"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Contact - Portfolio Website",
   description: "Get in touch with us for your next project",
 }
