@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar"
 import Contact from "@/components/contact"
+import Footer from "@/components/footer"
 
 export const metadata = {
   title: "Contact - Portfolio Website",
@@ -13,6 +14,7 @@ export default function ContactPage() {
       <main className="min-h-screen bg-white dark:bg-gray-950 pt-20">
         <Contact />
       </main>
+      <Footer />
     </>
   )
 } 

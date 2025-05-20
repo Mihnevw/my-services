@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar"
 import Projects from "@/components/projects"
+import Footer from "@/components/footer"
 
 export const metadata = {
   title: "Projects - Portfolio Website",
@@ -13,6 +14,7 @@ export default function ProjectsPage() {
       <main className="min-h-screen bg-white dark:bg-gray-950 pt-20">
         <Projects />
       </main>
+      <Footer />
     </>
   )
 } 

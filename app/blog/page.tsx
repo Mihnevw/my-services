@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar"
 import Blog from "@/components/BlogNotification"
+import Footer from "@/components/footer"
 
 export const metadata = {
   title: "Blog - Portfolio Website",
@@ -13,6 +14,7 @@ export default function BlogPage() {
       <main className="min-h-screen bg-white dark:bg-gray-950 pt-20">
         <Blog />
       </main>
+      <Footer />
     </>
   )
 } 

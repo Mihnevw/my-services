@@ -127,6 +127,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     signIn: "Sign in",
     signUp: "Sign up",
     password: "Password",
+    incorrectUsernameOrPassword: "Incorrect username or password",
 
     // Intro section
     introduction: "Introduction",
@@ -640,6 +641,7 @@ export const translations: { [lang: string]: TranslationDict } = {
     signIn: "Вход",
     signUp: "Регистрация",
     password: "Парола",
+    incorrectUsernameOrPassword: "Невалидно потребителско име или парола",
 
     // Intro section
     introduction: "Въведение",
